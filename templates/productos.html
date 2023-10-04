@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="bg-light p-1"></div>
+<div class="p-4 pt-2 h-100 fondo" style="--f:url(../static/img/fondo1.jpg)">
+    <h1 class="text-light text-center">Todos los productos</h1>
+    
+    
+
+    <div class="h-75" style="overflow: auto;">
+        
+        {% for g in G %}
+        {% if g.estado == 'ok' and g.cantidad > g.cantidad_min %}
+        
+        <div class="targeta d-inline-block p-4 rounded" title="{{g.nombre}}">
+            <a href="detalles?id={{g.id_producto}}" class="text-decoration-none">
+                <div class="" style="position: relative;padding-bottom: 100%;">
+                    <img class="rounded" src="../static/img/productos/{{g.img}}" alt="Imagen No Disponible" style="position: absolute;
+                    top: 0;
+                    bottom: 0;
+                    left: 0;
+                    right: 0;
+                    max-width: 100%;
+                    max-height: 100%;
+                    margin: auto;">
+                </div>
+
+                <h4 class="text-light">{{g.nombre}}</h4>
+
+                <button class="Centrado rounded-pill py-1">Ver más</button>
+
+                {% if current_user.is_authenticated and current_user.rol != 'comun' %}
+                <div class="rounded-end bg-danger esconder">
+                    <h6 class="text-light">Administrar</h6>
+                    <a href="productos_reseta?id={{g.id_producto}}"><button class="btn btn-light">Receta</button></a>
+                    <a href="productos_editar?id={{g.id_producto}}"><button class="btn btn-light">Producto</button></a>
+                </div>
+                {%endif%}
+            </a>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}

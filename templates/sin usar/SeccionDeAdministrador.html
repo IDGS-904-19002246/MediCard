@@ -1,0 +1,112 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div style="height: 4px;width: 100%;background-color: aqua;"></div>
+<div class="p-4 pt-2 back h-100" 
+    style="background-image: url(../static/img/back2.png); background-repeat:repeat;
+    background-size: 25% 25%;
+    height:100%; width: 100%;">
+
+    <h4 class="text-center text-light">Panel de administración: {{U.nombre}}</h4>
+    <div class="container text-light back502" style="margin-top: 32px;height: 90%;">
+        <div class="row p-4 h-100">
+            
+            <div class="col-2 p-4 text-dark" style="background-color: aqua;">
+                <form action="/SeccionDeAdministrador" method="POST" id="form">
+                    <h6>Nuevo juego</h6>
+                    <input type="hidden" name="csrf_token" value="{{csrf_token()}}"/>
+                    <input type="hidden" name="accion" value="add"/>
+                    <input type="hidden" name="id" value=""/>
+                    <label>Nombre:</label>
+                    <input type="text" name="nombre" class="w-100" required>
+                    <br><br>
+                    <label>Precio:</label>
+                    <input type="number" name="precio" min="5" class="w-50" required>
+                    <br><br>
+                    <label>Año:</label>
+                    <input type="number" name="ano" min="1970" class="w-50" required>
+                    <br>
+                    <label>Creador:</label>
+                    <input type="text" name="desarrolladora" class="w-100" required>
+                    <br>
+                    <label>Url Imagen:</label>
+                    <input type="text" name="url" class="w-100" required>
+                    <br>
+                    <button type="submit" class="btn btn-success mt-1 w-100">Guardar</button>
+                    <button type="button" class="btn btn-danger mt-1 w-100" onclick="cancel()">Cancelar</button>
+                </form>
+            </div>
+
+            <div class="col-10 p-4 bg-dark">
+                <table class="scroll w-100 text-center h-100">
+                    <thead class="d-block w-100">
+                        <tr>
+                            <th>Id</th>
+                            <th>Nombre</th>
+                            <th>Precio</th>
+
+                            <th>Creador</th>
+                            <th>Año de estreno</th>
+
+                            <th>Editar</th>
+                            <th>Borrar</th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody class="d-block w-100">
+                        {% for j in juegos%}
+
+                        <tr>
+                            <td>{{j.id}}</td>
+                            <td>{{j.nombre}}</td>
+                            <td>${{j.precio}}.00</td>
+
+                            <td>{{j.desarrolladora}}</td>
+                            <td>{{j.ano}}</td>
+
+                            
+                            <td>                                
+                                <button class="btn btn-success"
+                                onclick="update(
+                                    '{{j.id}}',
+                                    '{{j.nombre}}',
+                                    '{{j.precio}}',
+                                    '{{j.url}}',
+                                    '{{j.desarrolladora}}',
+                                    '{{j.ano}}'
+                                    )">Editar</button>
+                            </td>
+                            <td>
+                                <a href="SeccionDeAdministrador?id={{j.id}}">
+                                    <button class="btn btn-danger">Borrar</button>
+                                </a>
+                            </td>
+                        </tr>
+                            
+                        {% endfor %}
+
+                    </tbody>
+                
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    function update(id,nombre,precio,url,desarrolladora,ano) {
+        document.getElementsByName('accion')[0].value = 'update';
+        document.getElementsByName('id')[0].value = id;
+        document.getElementsByName('nombre')[0].value = nombre;
+        document.getElementsByName('precio')[0].value = precio;
+        document.getElementsByName('url')[0].value = url;
+        document.getElementsByName('desarrolladora')[0].value = desarrolladora;
+        document.getElementsByName('ano')[0].value = ano;
+    }
+    function cancel() {
+        document.getElementById('form').reset();
+        document.getElementsByName('accion')[0].value = 'add';
+        document.getElementsByName('id')[0].value = '';
+    }
+</script>
+{% endblock content %}

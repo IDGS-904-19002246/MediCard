@@ -1,0 +1,122 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="bg-light p-1"></div>
+
+<div class="p-4 fondo" style="--f:url(../static/img/fondo1.jpg)">
+    <div class="row">
+
+        <div class="col-sm-3 p-4 mt-2 bg-danger h-25" style="border-radius: 32px 8px 32px 32px;">
+            <h4 class="text-light text-center">Tipos de usuarios</h4>
+            <button class="btn btn-light m-2" onclick="$('#U .collapse').slideUp(200); $('#ADMIN').slideToggle(250);">Administradores</button><br>
+            <button class="btn btn-light m-2" onclick="$('#U .collapse').slideUp(200); $('#EMPLE').slideToggle(250);">Empleados</button><br>
+            <button class="btn btn-light m-2" onclick="$('#U .collapse').slideUp(200); $('#COMUN').slideToggle(250);">Comunes</button><br>
+            <button class="btn btn-light m-2" onclick="$('#U .collapse').slideUp(200); $('#BANN').slideToggle(250);">Baneados</button><br>
+        </div>
+
+        <div class="col-sm-9 table-responsive bg-opacity" id="U" style="--co:#ffffff80;">
+
+            <div class="p-2 table collapse" id="ADMIN">
+                {% if not ADMIN|length == 0%}
+                <h4>Administradores</h4>
+                    {% for A in ADMIN %}
+                    <div class="justify-content-between rounded bg-light px-4 py-2 mb-2">
+                        <h5>{{A[1] }}</h5>
+                        <h6>{{A[2] }}</h6>
+                        <div>
+                            <a href="usuarios_editar?id={{A[0]}}&es=empleado" class="p-0"><button class="btn btn-danger bg-danger py-0 my-2">Empleado</button></a>
+                            <a href="usuarios_editar?id={{A[0]}}&es=comun" class="p-0"><button class="btn btn-danger bg-danger py-0 my-2">Cliente</button></a>
+                            <a href="usuarios_editar?id={{A[0]}}&es=baneado" class="p-0"><button class="btn btn-danger bg-danger py-0 my-2">Banear</button></a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {%else%}
+                <h4>No hay Administradores</h4>
+                {% endif %}
+            </div>
+
+            <div class="p-2 table collapse" id="EMPLE">
+                {% if not EMPLE|length == 0%}
+                <h4>Empleados</h4>
+                    {% for E in EMPLE %}
+                    <div class="justify-content-between rounded bg-light px-4 py-2 mb-2">
+                        <h5>{{E[1] }}</h5>
+                        <h6>{{E[2] }}</h6>
+                        <div>
+                            <a href="usuarios_editar?id={{E[0]}}&es=admin" class="p-0"><button class="btn btn-danger bg-danger py-0 my-2">Administrador</button></a>
+                            <a href="usuarios_editar?id={{E[0]}}&es=comun" class="p-0"><button class="btn btn-danger bg-danger py-0 my-2">Cliente</button></a>
+                            <a href="usuarios_editar?id={{E[0]}}&es=baneado" class="p-0"><button class="btn btn-danger bg-danger py-0 my-2">Banear</button></a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {%else%}
+                <h4>No hay Empleados</h4>
+                {% endif %}
+            </div>
+
+            <div class="p-2 table collapse" id="COMUN">
+                {% if not COMUN|length == 0%}
+                <h4>Clientes</h4>
+                    {% for C in COMUN %}
+                    <div class="justify-content-between rounded bg-light px-4 py-2 mb-2">
+                        <h5>{{C[1] }}</h5>
+                        <h6>{{C[2] }}</h6>
+                        <div>
+                            <a href="usuarios_editar?id={{C[0]}}&es=admin" class="p-0"><button class="btn btn-danger bg-danger py-0 my-2">Administrador</button></a>
+                            <a href="usuarios_editar?id={{C[0]}}&es=empleado" class="p-0"><button class="btn btn-danger bg-danger py-0 my-2">Empleado</button></a>
+                            <a href="usuarios_editar?id={{C[0]}}&es=baneado" class="p-0"><button class="btn btn-danger bg-danger py-0 my-2">Banear</button></a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {%else%}
+                <h4>No hay Clientes registrados</h4>
+                {% endif %}
+            </div>
+
+            <div class="p-2 table collapse" id="BANN">
+                {% if not BANN|length == 0%}
+                <h4>Clientes</h4>
+                    {% for B in BANN %}
+                    <div class="justify-content-between rounded bg-light px-4 py-2 mb-2">
+                        <h5>{{B[1] }}</h5>
+                        <h6>{{B[2] }}</h6>
+                        <div>
+                            <a href="usuarios_editar?id={{B[0]}}&es=admin" class="p-0"><button class="btn btn-danger bg-danger py-0 my-2">Administrador</button></a>
+                            <a href="usuarios_editar?id={{B[0]}}&es=empleado" class="p-0"><button class="btn btn-danger bg-danger py-0 my-2">Empleado</button></a>
+                            <a href="usuarios_editar?id={{B[0]}}&es=comun" class="p-0"><button class="btn btn-danger bg-danger py-0 my-2">Cliente</button></a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {%else%}
+                <h4>No hay Usuarios Baneados</h4>
+                {% endif %}
+            </div>
+
+
+
+        </div>
+
+    </div>
+</div>
+<script>
+    function enconder(option) {
+        if (option == 1) {
+            $('#datos').removeClass('d-none');
+            $('#form1').addClass('d-none');
+            $('#form2').addClass('d-none');
+        }
+        if (option == 2){
+            $('#datos').addClass('d-none');
+            $('#form1').removeClass('d-none');
+            $('#form2').addClass('d-none');
+        }
+        if (option == 3){
+            $('#datos').addClass('d-none');
+            $('#form1').addClass('d-none');
+            $('#form2').removeClass('d-none');
+        }
+        
+    }
+</script>
+
+{% endblock content %}

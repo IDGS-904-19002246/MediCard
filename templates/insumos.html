@@ -1,0 +1,331 @@
+{% extends "layout.html" %}
+
+{% block content %}
+{% from '_macros.html' import render_firld2 %}
+<div class="bg-light p-1"></div>
+<div class="p-4 pt-2 h-100 fondo" style="--f:url(../static/img/fondo1.jpg)">
+
+    <div class="row bg-light rounded pb-2 fw-bold">
+        <form action="/insumos" method="POST" id="form">
+            <h4 class="text-center fw-bold" id="titulo">Añadir Ingrediente</h4>
+            <input type="hidden" name="csrf_token" value="{{csrf_token()}}" />
+            <input type="hidden" name="accion" value="add" />
+            <input type="hidden" name="id_insumo" value="" />
+
+            <div class="px-2 py-1"><Label>El ingrediente es perecedero</Label>
+                <input type="checkbox" name="perecedero" onchange="EsPerecedero(this)">
+            </div>
+
+            <div class="d-inline-block px-2 py-1">{{render_firld2(form.nombre)}}</div>
+            <div class="d-inline-block px-2 py-1" id="InsumoCantidad">{{render_firld2(form.cantidad)}}</div>
+            <div class="d-inline-block px-2 py-1">{{render_firld2(form.cantidad_min)}}</div>
+            <div class="d-inline-block px-2 py-1">
+                <div class="controls">
+                    <label for="">Medida</label>
+                    <br>
+                    <select name="medida" class="form-select">
+                        <option value="g" selected>Gramos</option>
+                        <option value="ml">Mililitros</option>
+                        <option value="pza">Piezas</option>
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="float-end">
+                <button type="submit" form="form" class="btn btn-primary" formnovalidate>Guardar</button>
+                <button type="button" class="btn btn-warning" onclick="cancel()">Limpiar</button>
+            </div>
+
+        </form>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 px-0 mt-2 h-100">
+            <div class="table-responsive bg-transparent">
+                <table class="table text-center fw-bold">
+                    <thead class="g-danger text-light">
+                        <tr >
+                            <th>N°</th>
+                            <th>Nombre</th>
+                            <th>Caducidad</th>
+                            <th>Cantidad</th>
+                            <th>Cantidad Minima</th>
+                            
+        
+                            <th>Modificar</th>
+                            <th>Eliminar</th>
+                        </tr>
+                    </thead>
+        
+                    <tbody class="table bg-opacity" style="--co:#ffffff80;">
+                        {% for i in I %}
+                        <tr class="insumo">
+                            <td>{{loop.index}}/{{I|length}}</td>
+                            <td>{{i.nombre}}</td>
+
+                            {% if i.caducidad[0] == 'nada'  %}
+                                <td>No perecedero</td>
+                            {% else %}
+                            <td><div class="py-0">
+                                <button class="rounded-pill btn-primary px-2" onclick="$('#{{i.id_insumo}}').slideToggle(200)"><i class="bi bi-eye-fill"></i></button>
+                                <button class="rounded-pill btn-primary px-2"
+                                onclick="insumoAdd('{{i.id_insumo}}')"
+                                ><i class="bi bi-plus-square-fill"></i></button>
+                                <!-- <form action="insumoAdd" method="POST" id="add{{i.id_insumo}}" class="collapse">
+                                    <input type="hidden" name="csrf_token" value="{{csrf_token()}}" />
+                                    <input type="hidden" name="id" value="{{i.id_insumo}}" />
+                                    <input type="number" class="m-1 rounded-pill w-25" name="can" min="1" />
+                                    <input type="date" class="m-1 rounded-pill" name="fec" min=""/><br>
+                                    <button type="" class="rounded-pill px-2 btn-danger">Guardar</button>
+                                </form> -->
+        
+                                <div id="{{i.id_insumo}}" class="collapse">
+                                    {%for f in i.caducidad %}
+                                        {{ f.can }}-> {{f.fecha}}<br>
+                                    {%endfor%}
+                                </div>
+                                </div>
+                            </td>
+                            {% endif %}
+
+                            <td>{{i.cantidad}} {{i.medida}}</td>
+                            <td>{{i.cantidad_min}} {{i.medida}}</td>
+                            <td><div class="py-0"><button class="rounded-pill btn-primary px-3"
+                                onclick='update("{{i.id_insumo}}","{{i.nombre}}","{{i.cantidad}}","{{i.cantidad_min}}","{{i.medida}}","{{i.caducidad}}")'>Modificar <i class="bi bi-pencil-square"></i></button></div></td>
+                            <td><div class="py-0"><button class="rounded-pill btn-warning px-3" onclick="eliminar('{{i.id_insumo}}')">Eliminar <i class="bi bi-trash3-fill"></i></button></div></td>
+                        </tr>
+                        {%endfor%}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+        
+    </div>
+</div>
+
+
+
+
+<div class="modal fade" id="myModalL" tabindex="-1" aria-labelledby="Label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header g-danger">
+                <h3 class="modal-title text-light" id="titulo"><b>Surtir a insumo</b></h3>
+                <button type="button" class="btn-close btn-light" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="F_proveedor" class="formulario" autocomplete="on" action="insumoAdd" method="POST">
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-floating mb-2">
+                                <input class="form-control m-1" type="number" name="can" min="1" required/>
+                                <label for="can">Cantidad</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-floating mb-2">
+                                <input class="form-control m-1" type="number" name="cos" min="1" required/>
+                                <label for="cos">Costo Total</label>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-floating mb-2">
+                                <input class="form-control m-1" type="date" name="fec" min="" required/>
+                                <label for="fec">Fecha de Caducidad</label>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-floating mb-2">
+                                <select class="form-select" name="pro" required>
+                                    {%for Pro in Proveedores%}<option value="{{Pro.id_proveedor}}">{{Pro.nombre}}</option>{%endfor%}
+                                </select>
+                                <label for="pro">Proveedor</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer g-danger justify-content-between d-flex">
+                    <input type="hidden" name="id" value="" />
+                    <input type="hidden" name="csrf_token" value="{{csrf_token()}}" />
+                    <button type="submit" class="btn btn-primary rounded-pill px-4">Guardar</button>
+                    <button type="button" class="btn btn-danger rounded-pill px-4" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="myModalUpdate" tabindex="-1" aria-labelledby="Label" aria-hidden="true">    
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header g-danger">
+                <h3 class="modal-title text-light" id="titulo"><b>Editar ingrediente</b></h3>
+                <button type="button" class="btn-close btn-light" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="InsumoUpdate" class="formulario" autocomplete="on" action="insumos" method="POST">
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-floating mb-2">
+                                <input class="form-control m-1" type="text" name="nom" minlength="4" required/>
+                                <label for="nom">Nombre:</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="controls">
+                                <label for="med">Medida</label>
+                                <br>
+                                <select name="med" class="form-select">
+                                    <option value="g" selected>Gramos</option>
+                                    <option value="ml">Mililitros</option>
+                                    <option value="pza">Piezas</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="g-danger pb-1"></div>
+
+                        <div class="col-md-6">
+                            <div class="form-floating mb-2">
+                                <input class="form-control m-1" type="number" name="can_min" min="1" required/>
+                                <label for="can_min">Cantidad Minima</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6" id="CantidadUpdate">
+                            <div class="form-floating mb-2">
+                                <input class="form-control m-1" type="number" name="can" min="1" required/>
+                                <label for="can">Cantidad</label>
+                            </div>
+                        </div>
+                        <div class="g-danger pb-1"></div>
+                        <div class="row" id="CaducidadUpdate">
+
+                        </div>
+
+                        
+                    </div>
+                </div>
+
+                <div class="modal-footer g-danger justify-content-between d-flex">
+                    <input type="hidden" name="id_insumo" value="" />
+                    <input type="hidden" name="accion" value="update" />
+                    <input type="hidden" name="csrf_token" value="{{csrf_token()}}" />
+                    <button type="submit" class="btn btn-primary rounded-pill px-4">Guardar</button>
+                    <button type="button" class="btn btn-danger rounded-pill px-4" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = ('0' + (today.getMonth() + 1)).slice(-2);
+    const day = ('0' + today.getDate()).slice(-2);
+
+    const formattedDate = `${year}-${month}-${day}`;
+    const myModalL = new bootstrap.Modal($('#myModalL'));
+    const myModalUpdate = new bootstrap.Modal($('#myModalUpdate'));
+
+
+
+
+    $('input[name="fec"]').prop('min', formattedDate)
+    window.addEventListener('load',()=>{
+        $('input[name="perecedero"]')[0].checked = false;
+        // $('#caducidad').prop('required',true);
+        // $('#caducidad').attr('min',new Date().toISOString().split('T')[0]);
+    })
+    
+    function insumoAdd(id) {
+        $('#F_proveedor').trigger("reset");
+        $('#myModalL input[name="id"]')[0].value = id;
+        myModalL.show()
+    }
+
+    function cancel() {
+        $('#form')[0].reset();
+        $('#InsumoCantidad').removeClass('d-none');
+        $('#form input[name="cantidad"]').prop('required',true);
+    }
+    function EsPerecedero(p){
+        if (p.checked == true) {
+            $('#InsumoCantidad').addClass('d-none');
+            $('#form input[name="cantidad"]').removeAttr("required");
+        }else{
+            $('#InsumoCantidad').removeClass('d-none');
+            $('#form input[name="cantidad"]').prop('required',true);
+        }}
+
+    function eliminar(id) {
+        Swal.fire({
+                title: 'Eliminar Insumo',
+                text: "Esta acción solo eliminará el ingrediente de las recetas, pero no del inventario o del apartado de finanzas ¿Quiere continuar?",
+                icon: 'info',
+                showCancelButton: false,
+                showDenyButton: true,
+                confirmButtonText: 'Sí, quiero eliminarlo',
+                confirmButtonColor: '#3085d6',
+                denyButtonText: 'Cancelar',
+                denyButtonColor: '#d33'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = 'insumoDelete?id=' + id;
+                }
+            })
+        
+    }
+    function update(id_insumo,nombre,cantidad,cantidad_min,medida,caducidad) {
+        var C = JSON.parse(caducidad.replaceAll("'",'"'));
+        var lista = $('#CaducidadUpdate');
+        lista.empty();
+        $('#InsumoUpdate input[name="id_insumo"]')[0].value = id_insumo;
+        $('#InsumoUpdate input[name="can_min"]')[0].value = cantidad_min;
+        $('#InsumoUpdate select[name="med"]').val(medida);
+        $('#InsumoUpdate input[name="nom"]')[0].value = nombre;
+
+        if (C[0] == 'nada'){
+            $('#CantidadUpdate').removeClass('d-none');
+            $('#InsumoUpdate input[name="can"]').prop('required',true);
+            $('#InsumoUpdate input[name="can"]').val(cantidad);
+        }else{
+            $('#CantidadUpdate').addClass('d-none');
+            $('#InsumoUpdate input[name="can"]').removeAttr("required");
+            i = 0;
+            C.forEach(item => {
+                lista.append(`
+                <div id="caducidad${i}" class="row">
+                    <div class="col-md-4">
+                        <div class="form-floating mb-2">
+                            <input class="form-control m-1" type="number" name="canUP" min="1" value="${item.can}"/>
+                            <label for="canUP">Cantidad</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">  
+                        <div class="form-floating mb-2">
+                            <input class="form-control m-1" type="date" name="fecUP" min="1" value="${item.fecha}"/>
+                            <label for="fecUP">Fecha Caducidad</label>
+                        </div>
+                    </div>
+                    <div class="col-md-2 py-4">
+                        <button class="rounded-pill btn-warning px-3 " onclick="$('#caducidad${i}').empty()"><i class="bi bi-trash3-fill"></i></button>
+                    </div>
+                </div>
+                `);
+                i++;
+            });
+        }
+        myModalUpdate.show();
+    }
+</script>
+{% endblock content %}

@@ -1,0 +1,9 @@
+.fondo-img{
+    height: 720px;
+    width: 100%;
+    background-size: 100% 100%;
+    background-image: var(--f);
+}
+.fondo-trans {
+    background-color: var(--co);
+}

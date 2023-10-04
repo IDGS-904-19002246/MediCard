@@ -1,0 +1,76 @@
+{% extends "layout.html" %}
+{% from '_macros.html' import render_firld2 %}
+{% block content %}
+<div class="bg-light p-1"></div>
+<div class="p-4 pt-2 back fondo-img" style="--f:url(../static/img/background.png);">
+
+    
+    <div class="container " style="margin-top: 32px;"  >
+        <div class="row p-4">
+            
+            <div class="col-4">
+                
+            </div>
+
+            <div class="col-4 p-4 rounded text-light fondo-trans" style="--co:#00000050;">
+                
+                <form action="/singup" method="POST" id="form">
+                    {% with messages = get_flashed_messages() %}{% if messages %}
+                    {{ messages[0] }}
+                    {% endif %}{% endwith %}
+
+                    <input type="hidden" name="csrf_token" value="{{csrf_token()}}"/>
+
+                    <h4 class="text-center text-light">Registrarse</h4>
+                    <div class="m-2">{{render_firld2(form.nombre , class='form-control')}}</div>
+                    <div class="m-2">{{render_firld2(form.apellidoP, class='form-control')}}</div>
+                    <div class="m-2">{{render_firld2(form.apellidoM, class='form-control')}}</div>
+
+                    <div class="m-2">{{render_firld2(form.correo, class='form-control')}}</div>
+                    <div class="m-2">{{render_firld2(form.contrasena, class='form-control')}}</div>
+                    <div class="m-2">{{render_firld2(form.contrasena2, class='form-control')}}</div>
+
+
+                    <!-- <label for="" class="w-25"><b>Nombre:</b></label>
+                    <input type="text" name="nombre" style="padding: 2px 16px;" required minlength="4">
+                    <br><br>
+                    <label for="" class="w-25"><b>Apellido Paterno:</b></label>
+                    <input type="text" name="apellidoP" style="padding: 2px 16px;" required minlength="4">
+                    <br><br>
+                    <label for="" class="w-25"><b>Apellido Materno:</b></label>
+                    <input type="text" name="apellidoM" style="padding: 2px 16px;" required minlength="4">
+                    <br><br>
+
+                    <label for="" class="w-25"><b>Correo:</b></label>
+                    <input type="email" name="correo" style="padding: 2px 16px;" required>
+                    <br><br>
+                    <label for="" class="w-25"><b>Contraseña:</b></label>
+                    <input type="password" name="contrasena" style="padding: 2px 16px;" required minlength="4">
+
+                    <br><br>
+                    <label for="" class="w-25"><b>Repita Contraseña:</b></label>
+                    <input type="password" name="contrasena2" style="padding: 2px 16px;" required minlength="4">
+                     -->
+                    <br><br>
+                    <button type="submit" class="btn btn-outline-light">Entrar <i class="bi bi-person-plus-fill"></i></button>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    const inputs = document.querySelectorAll("input");
+
+    inputs.forEach((input) => {
+        input.addEventListener("blur", (event) => {
+            if (event.target.value) {
+                input.classList.add("is-valid");
+            } else {
+                input.classList.remove("is-valid");
+            }
+        });
+    });
+</script>
+{% endblock content %}

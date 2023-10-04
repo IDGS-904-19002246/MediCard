@@ -1,0 +1,83 @@
+{% extends "layout.html" %}
+
+{% block content %}
+{% from '_macros.html' import render_firld2 %}
+<div class="bg-light p-1"></div>
+
+<div class="p-4 fondo" style="--f:url(../static/img/fondo1.jpg)">
+    <h2 class="text-light text-center" style="font-family: 'Cubano', sans-serif;">Productos que preparar y entregar</h2>
+
+    
+    <div class="p-4 mt-2 g-danger" style="border-radius: 32px 8px 32px 32px;">
+
+            <div class="row">
+
+                <div class="col-sm-5 table-responsive">
+                    <div class="m-2 table">
+                        {%if P|length == 0 %}
+                        <div class="estatico g-danger"><h4 class="text-light">No hay productos por preparar</h4></div>
+                        {%else%}
+                        <div class="estatico g-danger"><h4 class="text-light">Productos por cocinar</h4></div>
+                            {%for p in P%}
+                                <div class="justify-content-between d-flex">
+                                    <div class="p-2 bd-highlight text-capitalize"><b><a href="detalles?id={{p[0]}}" class="text-light m-0">({{p[2]}}) - {{p[1]}}</a></b></div>
+                                    <div>
+                                        <form action="cocinar" method="post" id="p{{p[0]}}" class="float-end">
+                                            <input type="hidden" name="csrf_token" value="{{csrf_token()}}" />
+                                            <input type="hidden" name="id" value="{{p[0]}}" />
+                                            <input type="hidden" name="can" value="{{p[2]}}" />
+                                            <button type="submit" class="btn btn-light py-0 bg-light" form="p{{p[0]}}">Producto Terminado</button>
+                                            <a href="cocina_eliminar?id={{p[0]}}"><button type="button" class="btn btn-light py-0 bg-light"><i class="bi bi-trash3-fill"></i></button></a>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="bg-light pt-1"></div>
+                            {%endfor%}
+                        {%endif%}
+                    </div>
+                </div>
+
+                <div class="col-sm-7 table-responsive">
+                    <div class="estatico g-danger"><h4 class="text-center text-light">Productos por enviar</h4></div>
+                    <div class="mx-2 my-0 table">
+                        
+                        {% for l in V %}
+                        <div class="justify-content-between items">
+                            <h5 class="text-light"><b>{{l.cliente}}</b></h5>
+                            <h5 class="text-light"><b>{{ l.fecha }}</b></h5>
+                            <h5 class="text-light"><b>Total: ${{l.costo}}</b></h5>
+
+                        
+                        <form action="entregar" method="post" id="f{{l.id_venta}}">
+                            <input type="hidden" name="csrf_token" value="{{csrf_token()}}" />
+                            <input type="hidden" name="id" value="{{l.id_venta}}" />
+                            <button type="submit" class="btn btn-light py-0 bg-light" form="f{{l.id_venta}}">Entregar</button>
+                        </form>
+                        </div>
+                        <div class="rounded bg-light mb-2">
+                            {% for ll in l.productos %}
+                            <div class="px-4 py-0">
+                                <h6 class="d-inline-block fw-bold px-4" style="width: 8%;">{{ ll.cantidad }}x</h6>
+                                <h6 class="d-inline-block fw-bold px-4 w-50">{{ ll.nombre }}</h6>
+                                <h6 class="d-inline-block fw-bold px-4 float-end">${{ ll.precio }}</h6>
+                                <br>
+                                <span class="px-4">{{ll.descripcion}}</span>
+                                
+                            </div>
+                            {% endfor %}
+                            {%if l.direccion %}<span class="px-4 fw-bold">Dirección de destino: {{l.direccion}}</span>{%endif%}
+                            
+                        
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>
+</div>
+<script>
+    
+</script>
+
+{% endblock content %}

@@ -1,0 +1,112 @@
+{% extends "layout.html" %}
+
+{% block content %}
+{% from '_macros.html' import render_firld2 %}
+<div class="bg-light p-1"></div>
+
+<div class="p-4 fondo" style="--f:url(../static/img/fondo1.jpg)">
+    <h2 class="text-light text-center" style="font-family: 'Cubano', sans-serif;">
+        Historial y Finanzas
+        <button class="btn btn-light" onclick="$('#vv').slideToggle(250);$('#cc').slideUp(250);">Ver ventas</button>
+        <button class="btn btn-light" onclick="$('#cc').slideToggle(250);$('#vv').slideUp(250);">Ver compras</button>
+    </h2>
+
+
+    <div class="p-4 mt-2 bg-danger" style="border-radius: 32px 8px 32px 32px;">
+
+        <div class="row">
+            <div class="row p-2">
+                <div class="col-sm-4">
+                    <h4 class="text-light"><b>Gastos: ${{F[1][0][0]}} Ganancias: ${{F[0][0][0]}}</b></h4>
+                </div>
+                <div class="col-sm-8">
+                    <label class="text-light">Mes</label>
+                    <input type="number" class="w-25 d-inline-block m-2" name="mes" id="mes" oninput="mes()" min="01"
+                        max="12">
+                    <label class="text-light">Año</label>
+                    <input type="number" class="w-25 d-inline-block m-2" name="año" id="ano" oninput="mes()" min="2020">
+                    <a href="ventas" id="ventasir"><button class="btn btn-light" id="ir">Ver mes</button></a>                    
+                </div>
+
+            </div>
+
+            <div class="col-sm-12 table-responsive p-2 rounded bg-opacity" style="--co:#00000080;">
+
+                <div class="mx-2 my-0 table" id="vv">
+                    {%if V|length == 0%}<h2 class="text-center text-light">No hay ventas en este mes</h2>{%endif%}
+                    {% for l in V %}
+                    <div class="justify-content-between items">
+                        <h5 class="text-light"><b>{{l.cliente}}</b></h5>
+                        <h5 class="text-light"><b>{{ l.fecha }}</b></h5>
+                        <h5 class="text-light"><b>Total: ${{l.costo}}</b></h5>
+                    </div>
+                    <div class="rounded bg-light mb-2">
+                        {% for ll in l.productos %}
+                        <div class="px-4 py-0">
+                            <h6 class="d-inline-block fw-bold px-4" style="width: 8%;">{{ ll.cantidad }}x</h6>
+                            <h6 class="d-inline-block fw-bold px-4 w-50">{{ ll.nombre }}</h6>
+                            <h6 class="d-inline-block fw-bold px-4 float-end">${{ ll.precio }}</h6>
+                            <br>
+                            <span class="px-4">{{ll.descripcion}}</span>
+                        </div>
+                        {% endfor %}
+                        {%if l.direccion %}<span class="px-4 fw-bold">Dirección de destino:
+                            {{l.direccion}}</span>{%endif%}
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="mx-2 my-0 table" id="cc">
+                    {%if C|length == 0%}<h2 class="text-center text-light">No hay compras a proveedores en este mes</h2>{%endif%}
+                    {% for c in C %}
+                    <div class="justify-content-between items">
+                        <h5 class="text-light w-50"><b>{{c.nombre}} ({{c.correo}})</b></h5>
+                        <h5 class="text-light"><b>Teléfono:{{ c.telefono }}</b></h5>
+                        <h5 class="text-light"><b>Costo: ${{c.costo}}</b></h5>
+                    </div>
+                    <div class="justify-content-between items rounded bg-light mb-2">
+                        <h5 class="px-4"><b>{{c.nombreI}}</b></h5>
+                        <h5><b>
+                            {%if c.medida == 'pza' %}{{c.cantidad}} {{c.medida}}{%endif%}
+                        
+                            {%if c.medida == 'ml' and c.medida != 'g' %}
+                                {%if  c.cantidad > 1000 %}
+                                    {{c.cantidad/1000}} L
+                                {%else%}
+                                    {{c.cantidad}} {{c.medida}}
+                                {%endif%}
+                            {%endif%}
+
+                            {%if c.medida == 'g' and c.medida != 'ml'%}
+                                {%if  c.cantidad > 1000 %}
+                                    {{c.cantidad/1000}} Kg
+                                {%else%}
+                                    {{c.cantidad}} {{c.medida}}
+                                {%endif%}
+                            {%endif%}
+                        </b></h5>
+                        <h5><b>{{c.fecha}}</b></h5>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function mes() {
+        var m = $('#mes')[0].value
+        const a = $('#ano')[0].value
+        if (m == '' || a == '') {
+            $('#ir')[0].disabled = true
+            $('#ventasir')[0].href = '';
+        } else {
+            if (m <= 9) { m = '0' + m; }
+            $('#ventasir')[0].href = 'ventas?f=' + a + '-' + m;
+            $('#ir')[0].disabled = false
+        }
+    }
+</script>
+
+{% endblock content %}

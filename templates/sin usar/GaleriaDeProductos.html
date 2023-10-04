@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div style="height: 4px;width: 100%;background-color: aqua;"></div>
+<div class="p-4 pt-2 container"
+    style="background-image: url(../static/img/back.png);height:100%; width: 100%;background-size: 100% 100%;">
+
+    <h2 class="text-center pb-0">Galeria, Usuario: {{U.nombre}}</h2>
+    
+    <div class="h-75" style="overflow: auto;">
+
+        {% for j in juegos%}
+        <div class="portada p-2 d-inline-block rounded" style="margin-bottom: 16px;">
+            <h4 class="text-light">{{j.nombre}}</h4>
+            <span>Precio: ${{j.precio}}.00</span>
+            <img src="{{j.url}}" class="w-100 rounded" alt="NoImagen">
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+
+
+
+
+
+
+{% endblock content %}

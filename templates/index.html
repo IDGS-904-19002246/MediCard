@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="bg-light p-1"></div>
+<div class="p-4 pt-2 h-100 fondo" style="--f:url(../static/img/fondo0.jpg)">
+    <div>
+        <img src="../static/img/logo0.png" alt="NoHayLogo :[" class="logo">
+        <!-- <img src="../static/img/logo.png" alt="NoHayLogo :[" class="logo"> -->
+        <h2 class="text-light text-center logo" style="font-family: 'Cubano', sans-serif;">
+            Crujientes por fuera, suaves por dentro y hechas con amor.
+        </h2>
+        <h4><a href="medicamentos">med</a></h4>
+        <h1 class="d-none">Crujientes por fuera, suaves por dentro y hechas con amor</h1>
+    </div>
+</div>
+
+<div class="h-100 fondo row" style="--f:url(../static/img/fondo2.jpg)">
+
+</div>
+
+
+
+
+
+<div class="bg-dar p-1"></div>
+<footer class="g-danger p-4">
+    <h4 class="text-light text-center">Corporativo Internacional Mexicano S.A de C.V</h4>
+</footer>
+
+
+<!-- <script>
+    var mostrar = 0;
+    var car = $('#carrucel .collapse');
+
+    function cambiar() {
+        car.eq(mostrar).slideToggle(250);
+        if (mostrar != 0) { car.eq(mostrar - 1).slideToggle(250); }
+
+        if (car.length <= mostrar) {
+            car.eq(mostrar).slideToggle(250);
+            mostrar = 0;
+            car.eq(mostrar).slideToggle(250);
+        }
+        mostrar++;
+    }
+    setInterval(cambiar, 4000);
+
+
+    //INTERESANTE
+        // car.each(function(index) {
+        //     var elemento = $(this);
+        //     console.log(elemento);
+        //     setTimeout(function() {elemento.slideToggle();}, index * 1000);
+        // });
+</script> -->
+{% endblock content %}

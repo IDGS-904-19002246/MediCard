@@ -1,0 +1,89 @@
+{% extends "layout.html" %}
+
+{% block content %}
+{% from '_macros.html' import render_firld2 %}
+<div class="bg-light p-1"></div>
+
+<div class="p-4 fondo" style="--f:url(../static/img/fondo1.jpg)">
+    <h2 class="text-light text-center" style="font-family: 'Cubano', sans-serif;">Receta de "{{ P[0][1] }}"</h2>
+
+    
+    <div class="p-4 mt-2 g-danger" style="border-radius: 32px 8px 32px 32px;">
+
+        <form action="productos_reseta" method="POST" id="producto" enctype="multipart/form-data" class="text-light" >
+            <div class="row">
+
+                <div class="col-sm-4 table-responsive">
+                    <div class="m-2 table text-light">
+                        {%if not R %}
+                        <h6>Este producto no tiene reseta</h6>
+                        {%else%}
+                        <h4>Ingredientes de la Reseta</h4>
+                            {%for r in R%}
+                            <div class="justify-content-between d-flex">
+                                <div class="p-2 bd-highlight text-capitalize"><b>• {{r[0]}}</b></div>
+                                <div class="p-2 bd-highlight"><b>{{r[1]}} {{r[2]}}</b></div>
+                            </div>
+                            <div class="bg-light pt-1"></div>
+                            {%endfor%}
+                        {%endif%}
+                        <br>
+                        <h4>Proceso</h4>
+                        <textarea name="proceso" cols="40" rows="4">{{P[0][6]}}</textarea>
+                        <input type="hidden" name="producto" value="{{P[0][0]}}" />
+                        <input type="hidden" name="csrf_token" value="{{csrf_token()}}" />
+                        <button type="submit" class="btn btn-light m-1" form="producto">Guardar</button>
+                        <a href="productos_admin"><button type="button" class="btn btn-light m-1">Volver al Administrador sin guardar</button></a>
+                        <a href="productos"><button type="button" class="btn btn-light m-1">Volver al Catalogo sin guardar</button></a>
+                    </div>
+                </div>
+
+                <div class="col-sm-8 table-responsive">
+                    <div class="m-2 table text-light">
+                        <h6>Los insumos que quiera añadir colóqueles la cantidad que se requieren para su receta, para eliminar un ingrediente solo deje el campo vació</h6>
+                        {%for i in I%}
+                        <div class="justify-content-between d-flex">
+                            <div class="p-1 bd-highlight text-capitalize"><b>{{i[1]}}</b></div>
+                            <div class="p-1 bd-highlight">
+                                <input type="number" name="{{i[0]}}" class="bg-light rounded-pill px-4 py-0" min="1">
+                                <div style="width: 32px; display: inline-block;"><b>{{i[4]}}</b></div>
+                            </div>
+                        </div>
+                        {%endfor%}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</div>
+<script>
+    window.addEventListener('load',()=>{
+        const json = JSON.parse('{{inputs}}'.replace(/&#39;/g, '"'))
+        json.forEach(item => {
+            $(`input[name="${item.id}"]`).val(item.cantidad)
+        });
+    });
+
+    function resetear(id){
+        $('#producto')[0].reset();
+        $('#blah')[0].src = '#'
+    }
+    function readURL(input) {
+    if (input.files && input.files[0]) { //Revisamos que el input tenga contenido
+        var reader = new FileReader(); //Leemos el contenido
+        reader.onload = function(e) { //Al cargar el contenido lo pasamos como atributo de la imagen de arriba
+        $('#blah').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+    }
+
+    $("#imgInp").change(function() { //Cuando el input cambie (se cargue un nuevo archivo) se va a ejecutar de nuevo el cambio de imagen y se verá reflejado.
+    readURL(this);
+    });
+
+
+</script>
+
+{% endblock content %}

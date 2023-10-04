@@ -1,0 +1,81 @@
+{% extends "layout.html" %}
+
+{% block content %}
+{% from '_macros.html' import render_firld2 %}
+<div class="bg-light p-1"></div>
+
+<div class="p-4 fondo" style="--f:url(../static/img/fondo1.jpg)">
+    <h2 class="text-light text-center" style="font-family: 'Cubano', sans-serif;">Administración Datos de:
+        {{form.nombre.data}}</h2>
+
+    
+    <div class="p-4 mt-2 g-danger" style="border-radius: 32px 8px 32px 32px;">
+
+
+        <form action="productos_editar" method="POST" id="producto" class="text-light" enctype="multipart/form-data">
+            <div class="row">
+
+                <div class="col-sm-4">
+                    <div class="m-2"><img class="w-50" src="../static/img/productos/{{form.img.data}}" alt="NoHayImagen"></div>
+                    <div class="m-2"><input type="file" class="w-100" name="img" id="imgInp" value=""></div>
+                    <div class="m-2"><img class="w-50" id="blah" src="#" alt="NoHayImagen"></div>
+                </div>
+
+                <div class="col-sm-8">
+                    <div class="m-2">{{render_firld2(form.nombre, class='form-control')}}</div>
+
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="m-2">{{render_firld2(form.cantidad, class='form-control')}}</div>
+                        </div>
+                        <div class="col-6">
+                            <div class="m-2">{{render_firld2(form.cantidad_min, class='form-control')}}</div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="m-2">{{render_firld2(form.precio_U, class='form-control')}}</div>
+                        </div>
+                        <div class="col-6">
+                            <div class="m-2">{{render_firld2(form.precio_M, class='form-control')}}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="m-2">{{render_firld2(form.descripcion, class='form-control')}}</div>
+                    <div class="m-2">{{render_firld2(form.proceso, class='form-control')}}</div>
+
+                    <input type="hidden" name="csrf_token" value="{{csrf_token()}}" />
+                    <input type="hidden" name="id_producto" value="{{form.id_producto.data}}" />
+                    <button type="submit" class="btn btn-light w-20" form="producto">Guardar</button>
+                    <button type="button" class="btn btn-light w-20" onclick="resetear('producto')">Borrar Imagen (Actualizar)</button>
+                    
+                    <a href="productos_admin"><button type="button" class="btn btn-light m-1">Volver al Administrador sin guardar</button></a>
+                    <a href="productos"><button type="button" class="btn btn-light m-1">Volver al Catalogo sin guardar</button></a>
+
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</div>
+<script>
+    function resetear(id){
+        $('input[name="img"]').val('')
+        $('#blah')[0].src = '#'
+    }
+    function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+        $('#blah').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+    }
+    $('#imgInp').change(function() {readURL(this);});
+
+
+</script>
+
+{% endblock content %}

@@ -1,0 +1,106 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="bg-light p-1"></div>
+
+<div class="p-4 fondo" style="--f:url(../static/img/fondo1.jpg)">
+    <div class="row">
+        <h2 class="text-light text-center" style="font-family: 'Cubano', sans-serif;">Nombre: {{U.nombre}}</h2>
+        {% with messages = get_flashed_messages() %}{% if messages %} <div class="text-light bg-danger m-2 p-2 rounded">{{ messages[0] }}</div>{% endif %}{% endwith %}
+
+        <div class="col-sm-3 p-4 mt-2 bg-danger h-25" style="border-radius: 32px 8px 32px 32px;">
+            <h4 class="text-light text-center">Mis Datos</h4>    
+            <ul class="text-light list-unstyled px-4" id="datos">
+                <li><b>Nombre:</b> {{U.nombre}} {{U.apellidoP}} {{U.apellidoM}}</li>
+                <li><b>Correo:</b> {{U.correo}}</li>
+                <li><b>Rol:</b> {{U.rol}}</li>
+                <br>
+                <button class="btn btn-light w-100" onclick="enconder(2)">Editar mis datos</button>
+                <br><br>
+                <button class="btn btn-light w-100" onclick="enconder(3)">Cambiar contraceña</button>
+            </ul>
+
+            <form action="micuenta_editar" method="POST" class="d-none" id="form1">
+                <input type="hidden" name="csrf_token" value="{{csrf_token()}}" />
+                <input type="hidden" name="id" value="{{U.id}}" />
+                <input type="hidden" name="accion" value="update" />
+
+                <label class="w-25">Nombre:</label>
+                <input class="w-50" type="text" name="nombre" style="padding: 2px 16px;" value="{{U.nombre}}" required>
+                <br><br>
+                <label class="w-25">Apellido Paterno:</label>
+                <input class="w-50" type="text" name="apellidoP" style="padding: 2px 16px;" value="{{U.apellidoP}}" required>
+                <br><br>
+                <label class="w-25">Apellido Materno:</label>
+                <input class="w-50" type="text" name="apellidoM" style="padding: 2px 16px;" value="{{U.apellidoM}}" required>
+                <br><br>
+                <label class="w-25">Correo:</label>
+                <input class="w-50" type="email" name="correo" style="padding: 2px 16px;" value="{{U.correo}}" required>
+                <br><br>
+
+                <button type="submit" class="btn btn-light w-20" form="form1">Guardar</button>
+                <button type="button" class="btn btn-light w-20" id="f_cancelar" onclick="enconder(1)">Cancelar</button>
+            </form>
+
+            <form action="micuenta_editar" method="POST" class="d-none" id="form2">
+                <input type="hidden" name="csrf_token" value="{{csrf_token()}}" />
+                <input type="hidden" name="id" value="{{U.id}}" />
+                <input type="hidden" name="accion" value="pass" />
+
+                <label class="w-50">Nueva Contraseña:</label>
+                <input class="d-inline-block" type="password" name="pass1" style="padding: 2px 16px;" required>
+                <br><br>
+                <label class="w-50">Confirma Contraseña:</label>
+                <input class="d-inline-block" type="password" name="pass2" style="padding: 2px 16px;" required>
+                <br><br>
+
+                <button type="submit" class="btn btn-light w-20" form="form2">Guardar</button>
+                <button type="button" class="btn btn-light w-20" id="f_cancelar" onclick="enconder(1)">Cancelar</button>
+            </form>
+        </div>
+
+        <div class="col-sm-9 p-4 mt-2 bg-light scroll h-100">
+            <h4 class="text-center">Mis Compras</h4>
+            <div style="overflow-x: hidden; height: 360px;scrollbar-width:none;">
+                {% for l in L %}
+                <h6>{{ l.fecha }}</h6>
+                    <div class="rounded bg-danger">
+                        {% for ll in l.productos %}
+                        <div class="px-4 py-3 text-light fw-bold">
+                            <h4 class="d-inline-block px-4" style="width: 8%;">{{ ll.cantidad }}x</h4>
+                            <h4 class="d-inline-block px-4 w-50">{{ ll.nombre }}</h4>
+                            <h4 class="d-inline-block px-4 float-end">${{ ll.precio }}</h4>
+                            <br>
+                            <span class="px-4">{{ll.descripcion}}</span>
+                        </div>
+                        {% endfor %}
+                    
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+    function enconder(option) {
+        if (option == 1) {
+            $('#datos').removeClass('d-none');
+            $('#form1').addClass('d-none');
+            $('#form2').addClass('d-none');
+        }
+        if (option == 2){
+            $('#datos').addClass('d-none');
+            $('#form1').removeClass('d-none');
+            $('#form2').addClass('d-none');
+        }
+        if (option == 3){
+            $('#datos').addClass('d-none');
+            $('#form1').addClass('d-none');
+            $('#form2').removeClass('d-none');
+        }
+        
+    }
+</script>
+
+{% endblock content %}

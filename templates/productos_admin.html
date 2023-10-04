@@ -1,0 +1,123 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="bg-light p-1"></div>
+
+<div class="p-4 fondo" style="--f:url(../static/img/fondo1.jpg)">
+    <h2 class="text-light text-center" style="font-family: 'Cubano', sans-serif;">Administración de Productos</h2>
+    {% with messages = get_flashed_messages() %}{% if messages %} <div class="text-light g-danger m-2 p-2 rounded">{{ messages[0] }}</div>{% endif %}{% endwith %}
+
+    <div class="row">
+
+        <div class="col-sm-3 p-4 mt-2 g-danger h-25" style="border-radius: 32px 8px 32px 32px;">
+            <a href="productos_añadir"><button type="button" class="btn btn-light w-20">Añadir Producto</button></a>
+            
+            {% if M|length != 0 and F|length == 0 %}
+                <ul class="text-light mt-4">
+                {% for m in M %}
+                <li>{{m}}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+
+            {% if M|length == 0 and F|length != 0 %}
+                <form action="productos_admin" method="POST" id="cocinarProducto">
+                    <span class="text-light">El producto que solicita cocinar generara mermas en los insumos, desea confirmar esta solicitud</span>
+                    <input type="hidden" name="csrf_token" value="{{csrf_token()}}" />
+                    <input type="hidden" name="accion" value="cocinar">
+                    <input type="hidden" name="id_pro" value="{{F[0]}}">
+                    <input type="hidden" name="unidad" class="w-25" min="1" value="{{F[1]}}">
+                    <button class="btn btn-light" type="submit" form="cocinarProducto">Confirmar Solicitud</button>
+                </form>
+            {% endif %}
+        </div>
+
+        <div class="col-sm-9 px-0 mt-2 bg-light h-100">
+            <div class="table-responsive">
+
+                <table class="table text-center fw-bold">
+                    <thead class="g-danger text-light">
+                        <tr>
+                            <th>Id</th>
+                            <th>Nombre</th>
+                            <th>Cantidad</th>
+                            <th>Cantidad Minima</th>
+                            <th>Precio Unidad / Mayoreo</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for g in G %}
+                        {% if g.estado == 'ok' %} 
+                        <tr>
+                            <td>{{g.id_producto}}</td>
+                            <td>{{g.nombre}}</td>
+                            <td>{{g.cantidad}}</td>
+                            <td>{{g.cantidad_min}}</td>
+                            <td>${{g.precio_U}} / ${{g.precio_M}}</td>
+                        </tr>
+                        <tr class="borde bg-opacity targeta" style="background-color: #ff000040;">
+                            <td colspan="3">Descripción: {{g.descripcion}}</td>
+                            <td colspan="1" class="rounded-end esconder2" style="background-color: #a56f34;">
+                                <span class="text-light w-25">Administrar {{g.nombre}}</span>
+                                <div class="w-50">
+                                    <a href="productos_editar?id={{g.id_producto}}"><button class="btn btn-light">Producto</button></a>
+                                    <a href="productos_reseta?id={{g.id_producto}}"><button class="btn btn-light" onclick="resetaUpdate('{{g.id_producto}}')">Receta</button></a>
+
+                                    <form action="productos_admin" id="cocinar_{{g.id_producto}}" class="d-inline-block" method="POST">
+                                        <input type="hidden" name="csrf_token" value="{{csrf_token()}}" />
+                                        <input type="hidden" name="id_pro" value="{{g.id_producto}}">
+                                        <input type="hidden" name="accion" value="validar">
+                                        <button class="btn btn-light" type="submit" form="cocinar_{{g.id_producto}}" disabled="false">Preparar Más</button>
+                                        <input type="number" name="unidad" class="w-25" min="1" oninput="cocinar(this)">
+                                    </form>
+                                    
+
+                                    <div class="btn-esquina">
+                                        <button class="rounded-pill px-2" onclick="esconder(this)"><i class="bi bi-caret-left"></i></button>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <button class="btn btn-light" onclick="opciones(this)">Opciones</button>
+                                <a href="ProductosDelete?id={{g.id_producto}}"><button class="btn btn-light"><i class="bi bi-trash3-fill"></i></button></a>
+                            </td>
+                        </tr>
+                        {%endif%}
+                        {%endfor%}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    function opciones(boton) {
+        var fila = boton.parentElement.parentElement;
+        var elementoEsconder = fila.querySelector('.esconder2');
+        elementoEsconder.style.width = "80%";
+        elementoEsconder.style.opacity = 1;
+    }
+    function esconder(boton) {
+        var fila = boton.parentElement.parentElement.parentElement;
+        fila.style.width = "0%";
+        fila.style.opacity = 0;
+    }
+    // function productoUpdate(p){
+    //     const json = p.replace(/'/g, '"')
+    // }
+    function cocinar(inp){
+        var form = inp.parentElement;
+        var boton = form.querySelector('button')
+        if (!inp.value) {
+            boton.disabled = true
+        } else {
+            boton.disabled = false
+        }
+    }
+
+</script>
+
+{% endblock content %}

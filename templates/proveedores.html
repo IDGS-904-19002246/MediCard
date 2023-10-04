@@ -1,0 +1,153 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="bg-light p-1"></div>
+
+<div class="p-4 fondo" style="--f:url(../static/img/fondo1.jpg)">
+    <h2 class="text-light text-center" style="font-family: 'Cubano', sans-serif;">Productos que preparar y entregar</h2>
+
+
+    <div class="p-4 mt-2 bg-danger" style="border-radius: 32px 8px 32px 32px;">
+
+        <div class="row">
+
+            <div class="col-sm-4 table-responsive">
+                <div class="m-2 table">
+                    {%if P|length == 0 %}
+                    <div class="justify-content-between d-flex estatico bg-danger">
+                        <h4 class="text-light">No hay Proveedores</h4>
+                        <button class="rounded-pill px-2" onclick="ProveedorAdd()"><i
+                                class="bi bi-plus-square-fill"></i></button>
+                    </div>
+                    {%else%}
+                    <div class="justify-content-between d-flex estatico bg-danger">
+                        <h4 class="text-light">Lista de Proveedores</h4>
+                        <button class="rounded-pill px-2" onclick="ProveedorAdd()"><i
+                                class="bi bi-plus-square-fill"></i></button>
+                    </div>
+                    {%for p in P%}
+                    <button class="btn btn-light rounded-pill px-2" onclick='ProveedorEdit("{{p.id_proveedor}}","{{p.nombre}}","{{p.correo}}","{{p.telefono}}", "{{p.direccion}}")'><i class="bi bi-pencil-square"></i></button>
+                    <a href="proveedores?proveedor={{p.id_proveedor}}"><button
+                            class="btn btn-light m-1">{{p.nombre}}</button></a><br>
+                    {%endfor%}
+                    {%endif%}
+                </div>
+            </div>
+
+            <div class="col-sm-8 table-responsive">
+                <div class="mx-2 my-0 table">
+                    {%if L|length == 0 %}
+                    <div class="estatico bg-danger"><h4 class="text-light text-center">No hay compras de este Proveedor</h4></div>
+                    {%else%}
+                    <div class="estatico bg-danger"><h4 class="text-light text-center">Lista de compras de "{{L[0].empresa}}"</h4></div>
+                    {%for l in L%}
+                    <div class="justify-content-between d-flex bg-light p-2 m-1 rounded">
+                        <div class="text-capitalize w-25">{{l.insumo}}</div>
+                        <div>${{l.costo}}</div>
+                        <div>{{l.fecha}}</div>
+                    </div>
+                    {%endfor%}
+                    {%endif%}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="myModalL" tabindex="-1" aria-labelledby="Label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header g-danger">
+                <h3 class="modal-title text-light" id="titulo"><b>Añadir Proveedor</b></h3>
+                <button type="button" class="btn-close btn-light" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="F_proveedor" class="formulario" autocomplete="on" action="formulario" method="POST">
+
+                <div class="modal-body">
+                    <div class="row">
+
+                        <div class="col-md-12">
+                            <div class="form-floating mb-2">
+                                <input class="form-control" type="text" name="nombre" required>
+                                <label for="nombre">Nombre</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-2">
+                                <input class="form-control" type="email" name="correo" required>
+                                <label for="correo">Correo</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-2">
+                                <input class="form-control" type="text" name="telefono" required pattern="[0-9]{10}">
+                                <label for="tel">Teléfono</label>
+                            </div>
+                        </div>
+
+                        <h4 class="text-center">Dirección</h4>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-2">
+                                <input class="form-control" type="text" name="calle" required>
+                                <label for="calle">Calle</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-2">
+                                <input class="form-control" type="number" name="num" required min="100" max="10000">
+                                <label for="num">Número</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-2">
+                                <input class="form-control" type="text" name="colonia" required>
+                                <label for="colonia">Colonia</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-2">
+                                <select class="form-select" name="ciudad">
+                                    <option value="León">León</option>
+                                </select>
+                                <label for="ciudad">Ciudad</label>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="modal-footer" style="justify-content:space-around;">
+                    <input type="hidden" name="id" value="" />
+                    <input type="hidden" name="csrf_token" value="{{csrf_token()}}" />
+                    <button type="submit" class="btn btn-primary rounded-pill px-4">Guardar</button>
+                    <button type="button" class="btn btn-danger rounded-pill px-4" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    var myModalL = new bootstrap.Modal($('#myModalL'));
+    function ProveedorAdd() {
+        $('#myModalL input[name="id"]')[0].value = '';
+        $('#F_proveedor').trigger("reset");
+        myModalL.show()
+    }
+    function ProveedorEdit(id, nombre, correo, telefono,direccion) {
+        D = JSON.parse(direccion.replaceAll("'", '"'));
+        $('#myModalL input[name="id"]')[0].value = id;
+        $('#myModalL input[name="nombre"]')[0].value = nombre;
+        $('#myModalL input[name="correo"]')[0].value = correo;
+        $('#myModalL input[name="telefono"]')[0].value = telefono;
+        
+        $('#myModalL input[name="calle"]')[0].value = D[0];
+        $('#myModalL input[name="num"]')[0].value = D[1];
+        $('#myModalL input[name="colonia"]')[0].value = D[2];
+        myModalL.show()
+    }
+</script>
+
+{% endblock content %}

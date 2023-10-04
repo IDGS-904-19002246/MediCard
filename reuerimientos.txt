@@ -1,0 +1,21 @@
+py -m venv env
+
+pip install flask
+pip install flask-sqlalchemy
+pip install Flask-WTF
+pip install PyMySQL
+
+pip install python-decouple
+pip install python-dotenv
+pip install mysqlclient
+pip install WTForms
+
+pip install email-validator
+pip install SQLAlchemy
+
+
+pip install flask_login
+pip install flask_security
+pip install pytz
+
+decouple

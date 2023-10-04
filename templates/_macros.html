@@ -1,0 +1,19 @@
+{% macro render_firld2(field) %}
+    <div class="input-container">
+        {{field(**kwargs)|safe}}
+        {{field.label}}
+    </div>
+    <!-- https://webdesign.tutsplus.com/recreate-material-design-floating-label--cms-37326t -->
+    <!--   <div class="form-group float-label-control label-bottom text-light">
+        {{ field.label(class="form-label") }}
+        {{ field(class="form-control", **kwargs)|safe }}
+    </div> -->
+        
+    {% if field.errors %}
+        <ul class="bg-danger">
+            {% for error in field.errors %}
+                <li style="color:white;" class="text-break">{{error}}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endmacro %}

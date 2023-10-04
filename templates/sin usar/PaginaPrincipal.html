@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div style="height: 4px;width: 100%;background-color: aqua;"></div>
+<div class="p-4 pt-2 container"
+    style="background-image: url(../static/img/back.png);height:100%; width: 100%;background-size: 100% 100%;">
+
+    <nav class="navbar navbar-expand-lg m-4 container" style="background-color: aqua;">
+        <div class="collapse navbar-collapse">
+            <ul class="mb-0 w-100" style="justify-content: space-between;display: flex;">
+                <li class="d-inline-block" style="width: 12%;"><span>Tu tienda</span></li>
+                <li class="d-inline-block" style="width: 12%;"><span>Categorías</span></li>
+                <li class="d-inline-block" style="width: 12%;"><span>Gratis</span></li>
+                <li class="d-inline-block" style="width: 12%;"><span>Demos</span></li>
+
+                <li class="d-inline-block" style="width: 12%;"><span>Noticias</span></li>
+                <li class="d-inline-block" style="width: 12%;"><span>Eventos</span></li>
+                <li class="d-inline-block" style="width: 12%;"><span>Nuevo</span></li>
+                <li class="d-inline-block" style="width: 12%;"><span>Destacable</span></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div style="margin-top: 150px;">
+        <div class="pt-4 d-flex justify-content-around back50">
+            <div class="w-25">
+                <img class="w-100 logo" src="../static/img/logo.png" alt="NoHaylogo">
+            </div>
+            <h5 class="text-light ">
+                <ul>
+                    <li>Nombre de la empresa: Steam.</li>
+                    <li>Fundada: 2003.</li>
+                    <li>Propiedad de Valve Corporation.</li>
+                    <li>Plataforma de distribución digital de videojuegos.</li>
+                    <li>Disponible en más de 237 países y 28 idiomas.</li>
+                    <li>Usuarios: más de 120 millones.</li>
+                    <li>Disponible en Windows, MacOS, Linux, iOS y Android.</li>
+                </ul>
+            </h5>
+        </div>
+    </div>
+</div>
+{% endblock content %}

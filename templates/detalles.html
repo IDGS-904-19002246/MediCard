@@ -1,0 +1,80 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="bg-light p-1"></div>
+<div class="px-4 back h-100 fondo " style="--f:url(../static/img/fondo1.jpg)">
+    <h2 class="text-light text-center" style="font-family: 'Cubano', sans-serif;">{{G[0].nombre}}</h2>
+
+    <div class="row h-75 producto">
+
+        <div class="col-sm-6 px-2 py-1">
+            <div class="rounded m-4 h-100 bg-opacity d-flex align-items-center" style="--co:#00000080;"><img
+                    class="h-100 mx-auto" src="../static/img/productos/{{G[0].img}}" alt="Imagen No Disponible"></div>
+        </div>
+
+        <div class="col-sm-6 px-2 py-1">
+            <div class="p-4 m-4 bg-light rounded">
+                <h4>{{G[0].nombre}}</h4>
+                <span>{{G[0].descripcion}}</span>
+                <br><br>
+                <span>
+                    <h4 class="d-inline">${{G[0].precio_U}}.00 </h4>Precio por mayoreo (A partir de 10 unidades):
+                    ${{G[0].precio_M}}.00
+                </span>
+                <br>
+                <hr>
+
+                <form action="/detalles" method="POST">
+                    <label>Cantidad:</label>
+                    <input type="hidden" name="id" value="{{G[0].id_producto}}">
+                    <input type="hidden" name="csrf_token" value="{{csrf_token()}}" />
+                    <input name="can" type="number" min="1" max="{{G[0].cantidad}}-{{G[0].cantidad_min}}"
+                        class="w-25 px-2" oninput="limite(this, '{{G[0].cantidad}}'-'{{G[0].cantidad_min}}')">
+
+                    <button type="submit" class="btn btn-primary my-1" id="CarritoAdd">Añadir al carrito</button>
+                </form>
+
+                <span class="bg-danger d-block text-light p-1 m-1 d-none" id="msg_limite">El limite para vender es
+                    {{G[0].cantidad - G[0].cantidad_min}}</span>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row text-light bg-danger">
+
+    <div class="col-sm-6 p-4 ">
+        <h4 class="text-light text-center" style="font-family: 'Cubano', sans-serif;">Ingredientes</h4>
+        {%for r in R%}
+        <div class="justify-content-between d-flex">
+            <div class="p-2 bd-highlight text-capitalize"><b>• {{r[0]}}</b></div>
+            <div class="p-2 bd-highlight"><b>{{r[1]}} {{r[2]}}</b></div>
+        </div>
+        <div class="bg-light p-1"></div>
+        {%endfor%}
+    </div>
+
+    <div class="col-sm-6 p-4">
+        <h4 class="text-light text-center " style="font-family: 'Cubano', sans-serif;">Procedimiento</h4>
+        <span class="p-4">
+            <p class="p-4 font-weight-bold"><b>
+                    {{G[0].proceso}}
+                </b>
+            </p>
+        </span>
+    </div>
+
+</div>
+<script>
+    function limite(input, limite) {
+        if (input.value > limite) {
+            $('#msg_limite').removeClass('d-none');
+            $('#CarritoAdd')[0].disabled = true
+        } else {
+            $('#msg_limite').addClass('d-none');
+            $('#CarritoAdd')[0].disabled = false
+        }
+    }
+</script>
+{% endblock content %}

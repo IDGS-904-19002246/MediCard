@@ -1,0 +1,18 @@
+@font-face {
+    font-family: 'Nunito';
+    src: url('../static/founts/Nunito-Regular.ttf') format('truetype');
+}
+
+body {
+    font-family: 'Nunito', Arial, sans-serif;
+}
+  
+  /* h1 {
+    font-family: 'Nunito', sans-serif;
+  } */
+
+
+#form .bg-danger{
+    background-color: rgba(250,0,0,0.5);
+    
+}
