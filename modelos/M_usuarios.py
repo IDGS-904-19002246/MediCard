@@ -20,6 +20,19 @@ class tbl_usuarios(UserMixin, db.Model):
 
     def is_active(self): return True
     def get_id(self): return self.id_usuario
+
+    def Insert(nombre,apellidoP,apellidoM,correo,contrasena):
+        try:
+            connection = get_connection()
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    'call usuariosInsert(%s,%s,%s,%s,%s)',
+                    (nombre,apellidoP,apellidoM,correo,contrasena)
+                )
+                resultset = cursor.fetchall()
+                return resultset
+        except Exception as ex:
+            print(ex)
 # ---------------------------------------------------------------------------------
 class usuariosF():
     def Insert(nombre,apellidoP,apellidoM,correo,contrasena):

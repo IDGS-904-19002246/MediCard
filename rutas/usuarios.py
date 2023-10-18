@@ -31,6 +31,29 @@ usu = Blueprint('usu',__name__)
 #     return response
 #     return redirect(url_for('usu.login'))
 
+@usu.route('/login')
+def login():
+    create_form = validaciones.usuarios(request.form)
+    return render_template('login.html',form=create_form)
+
+
+@usu.route("/login", methods=['GET','POST'])
+def login_post():
+    create_form = validaciones.login(request.form)
+    if request.method == 'POST' and create_form.validate():
+        correo = request.form.get('correo')
+        contrasena = request.form.get('contrasena')
+        U = tbl_usuarios.query.filter_by(correo=correo).first()
+
+        if not U or not check_password_hash(U.contrasena, contrasena) :
+            flash('El usuario y/o la contraseña son incorrectos')
+            return render_template('login.html',form=create_form)
+        if U.rol == 'baneado':
+            flash('Este usuario esta baneado')
+            return redirect(url_for('usu.login'))
+        login_user(U)
+        return redirect(url_for('index'))
+    
 
 @usu.route('/singup', methods=['GET','POST'])
 def singup():
@@ -48,15 +71,32 @@ def singup():
             flash('El Correo ya esta en uso')
             return redirect(url_for('usu.singup'))
         
+        # return str(
+
+        #     request.form.get('nombre')
+        #            )
         
-        usuariosF.Insert(
-            request.form.get('nombre'),
-            request.form.get('apellidoP'),
-            request.form.get('apellidoM'),
-            correo,
-            generate_password_hash(str(contrasena), method='sha256')
-        )        
-        return redirect(url_for('usu.login'))
+        nuevo_usuario = tbl_usuarios(
+            nombre = request.form.get('nombre'),
+            apellidoP =request.form.get('apellidoP'),
+            apellidoM = request.form.get('apellidoM'),
+            correo = correo,
+            contrasena = generate_password_hash(str(contrasena), method='sha256'),
+            rol  ='comun'
+            )
+        
+        db.session.add(nuevo_usuario)
+        db.session.commit()
+
+        # tbl_usuarios.Insert(
+        #     request.form.get('nombre'),
+        #     request.form.get('apellidoP'),
+        #     request.form.get('apellidoM'),
+        #     correo,
+        #     generate_password_hash(str(contrasena), method='sha256')
+        # )
+        # return render_template('login.html',form=create_form)
+        return redirect(url_for('usu.login',form=create_form))
     else:
         return render_template('singup.html',form = create_form)
 

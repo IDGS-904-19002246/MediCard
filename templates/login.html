@@ -21,7 +21,7 @@
             <div class="col-4 p-4 rounded text-light fondo-trans" style="--co:#00000050;">
 
             <!-- <div class="col-4 p-4 rounded bg-opacity text-light" style="--co:#00000080;"> -->
-                <form action="/login2" method="POST">
+                <form action="/login" method="POST">
                     {% with messages = get_flashed_messages() %}{% if messages %}<div class="bg-danger m-2 p-2 rounded">{{ messages[0] }}</div>{% endif %}{% endwith %}
                     <input type="hidden" name="csrf_token" value="{{csrf_token()}}"/>
 
@@ -38,13 +38,19 @@
                     
                     <br><br>
                     <!-- <button type="submit" class="btn btn-success">Entrar</button> -->
-                    <button type="submit" class="btn btn-outline-light">Entrar <i class="bi bi-person-plus-fill"></i></button>
+                    <button type="submit" class="btn btn-outline-light w-100">Entrar <i class="bi bi-person-plus-fill"></i></button>
 
-                    <a href="/login_google">
-                        <button type="button" class="btn btn-outline-light">Iniciar con google</button>
-                    </a>
+                    
 
                 </form>
+                <br>
+                <a href="/login_google">
+                    <button type="button" class="btn btn-outline-light w-100">Iniciar con google</button>
+                </a>
+                <hr>
+                <a href="/singup">
+                    <h6 class="text-light text-center">Registrarse</h6>
+                </a>
             </div>
 
         </div>

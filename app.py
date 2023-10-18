@@ -1,6 +1,7 @@
 import flask
 from flask import session,make_response
 from flask_wtf.csrf import CSRFProtect
+from flask import jsonify
 
 
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -84,45 +85,45 @@ def load_user(user_id): return tbl_usuarios.query.get(int(user_id))
 @app.route("/", methods=['GET', 'POST'])
 def index():
     medicinas = tbl_medicamentos.query.all()
-    return str(medicinas)
-    return render_template('index.html', current_user=current_user, )
+    medicinas_json = [{"id": medicina.id_medicamento, "nombre": medicina.nombre, "fabricante": medicina.fabricante} for medicina in medicinas]
+    return jsonify({"medicinas": medicinas_json})
+
+
+    # return render_template('index.html', current_user=current_user, )
 
 
 @app.route("/nosotros", methods=['GET'])
 def nosotros(): return render_template('nosotros.html',current_user=current_user)
 
-@app.route('/login')
-def login():
-    create_form = validaciones.usuarios(request.form)
-    return render_template('login.html',form=create_form)
         # return google.authorize(callback=url_for('authorized', _external=True))
 
 @app.route("/login_google")
 def login_google():
     return google.authorize(callback=url_for('authorized', _external=True))
 
-@app.route("/login", methods=['GET','POST'])
-def login_post():
-    create_form = validaciones.login(request.form)
-    if request.method == 'POST' and create_form.validate():
-        correo = request.form.get('correo')
-        contrasena = request.form.get('contrasena')
-        U = tbl_usuarios.query.filter_by(correo=correo).first()
+# @app.route("/login", methods=['GET','POST'])
+# def login_post():
+#     create_form = validaciones.login(request.form)
+#     if request.method == 'POST' and create_form.validate():
+#         correo = request.form.get('correo')
+#         contrasena = request.form.get('contrasena')
+#         U = tbl_usuarios.query.filter_by(correo=correo).first()
 
-        if not U or not check_password_hash(U.contrasena, contrasena) :
-            flash('El usuario y/o la contraseña son incorrectos')
-            return render_template('login.html')
-        if U.rol == 'baneado':
-            flash('Este usuario esta baneado')
-            return redirect(url_for('usu.login'))
-        login_user(U)
-        return redirect(url_for('index'))
+#         if not U or not check_password_hash(U.contrasena, contrasena) :
+#             flash('El usuario y/o la contraseña son incorrectos')
+#             return render_template('login.html')
+#         if U.rol == 'baneado':
+#             flash('Este usuario esta baneado')
+#             return redirect(url_for('usu.login'))
+#         login_user(U)
+#         return redirect(url_for('index'))
     
         
 # --------------------------------------------------------------------------------------
 # @app.route('/')
 # def index():
 #     return '¡Bienvenido a tu aplicación Flask! <a href="/login">Iniciar sesión con Google</a>'
+
 
 @app.route('/login2', methods=['GET','POST'])
 def login2(): return google.authorize(callback=url_for('authorized', _external=True))
@@ -155,7 +156,7 @@ def authorized(resp):
 
     # user_info.data['given_name']
     # {'id': '117574744195465502937', 'email': '19002246@alumnos.utleon.edu.mx', 'verified_email': True, 'picture': 'https://lh3.googleusercontent.com/a/default-user=s96-c', 'hd': 'alumnos.utleon.edu.mx'}
-    return redirect(url_for('app.index'))
+    return redirect(url_for('index'))
     return str(user_info.data)
 
 @google.tokengetter
