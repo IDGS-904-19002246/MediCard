@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 
@@ -105,4 +106,113 @@ const fechaEnFormatoDeseado = fechaActual.getFullYear()+'-'+String(fechaActual.g
 $('#ventas')[0].href = 'ventas?f='+fechaEnFormatoDeseado;
 </script>
 
+=======
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    
+    <link rel="shortcut icon" href="../static/img/logo_min.png">
+
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <script src="../static/js/bootstrap.bundle.min.js"></script>
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css"> -->
+    
+    <!-- <link href="https://fonts.cdnfonts.com/css/cubano" rel="stylesheet"> -->
+
+
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
+
+    <link rel="stylesheet" href="../static/estilo.css">
+    <link rel="stylesheet" href="../static/inputs.css">
+    <link rel="stylesheet" href="../static/fondo.css">
+    <title>MediCard</title>
+</head>
+
+<body>
+    <div>
+
+        <nav class="navbar navbar-expand-lg navbar-light g-danger text-light p-0">
+            <div class="navbar-brand p-0">
+                <img src="../static/img/logo_min.png" style="height: 40px;margin-left: 40px;" alt="NoLogo">
+            </div>
+            <button class="navbar-toggler" onclick="$('#navbarNav').slideToggle(250);">
+                <span class="navbar-toggler-icon"></span></button>
+
+            <div class="navbar-collapse collapse" id="navbarNav">
+
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link text-light" href="/index">Inicio</span></a></li>
+                    <li class="nav-item"><a class="nav-link text-light" href="/productos">Productos</span></a></li>
+                    <li class="nav-item"><a class="nav-link text-light" href="/nosotros">Nosotros</span></a></li>
+
+                    {% if current_user.is_authenticated and current_user.rol == 'admin' or current_user.rol == 'empleado' %}
+                    
+                    <li class="nav-item"><a class="nav-link text-light" onclick="$('#admin').slideToggle(250);">
+                        Administración
+                        <div class="collapse bg-light position-absolute px-4" id="admin" style="z-index: 2;">
+                            <div><a class="nav-link" href="/productos_admin">Productos</a></div>
+                            <div><a class="nav-link" href="/insumos">Ingredientes</a></div>
+                            <div><a class="nav-link" href="/cocina">Cocina</a></div>
+
+                            {%if current_user.rol == 'admin'%}
+                            
+                            <div><a class="nav-link" href="/ventas" id="ventas">Ventas</a></div>
+                            <div><a class="nav-link" href="/usuarios">Usuarios</a></div>
+                            <div><a class="nav-link" href="/proveedores">Proveedores</a></div>
+                            {%endif%}
+                        </div>
+                    </li>
+                    {% endif %}
+                </ul>
+
+                <ul class="navbar-nav mr-auto">
+                    {% if not current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link text-light" href="login">Iniciar Sesión</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light" href="singup">Crear Cuenta</a>
+                    </li>
+                    {%endif%}
+                    {% if current_user.is_authenticated  %}
+                    <li class="nav-item float-end">
+                        <a class="nav-link text-light" href="carrito"><i class="bi bi-cart"></i></a>
+                    </li>
+                    <li class="nav-item float-end">
+                        <a class="nav-link text-light" href="micuenta">Mi Cuenta</a>
+                    </li>
+                    <li class="nav-item float-end">
+                        <a class="nav-link text-light" href="logout">Cerrar Sesión</a>
+                    </li>
+                    {%endif%}
+                </ul>
+
+            </div>
+        </nav>
+
+
+
+
+    </div>
+
+    <div style="height:90%;width: 100%; background-color: black;">
+        <!-- <h1>{{current_user.nombre}}</h1> -->
+        {% block content %}
+
+        {% endblock %}
+    </div>
+</body>
+<script>
+const fechaActual = new Date();
+const fechaEnFormatoDeseado = fechaActual.getFullYear()+'-'+String(fechaActual.getMonth() + 1).padStart(2, '0');
+$('#ventas')[0].href = 'ventas?f='+fechaEnFormatoDeseado;
+</script>
+
+>>>>>>> d1bce09 (Error DeLibrerias Respaldo)
 </html>

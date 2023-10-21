@@ -26,4 +26,3 @@ class medicamentosF():
                 return cursor.fetchall()
         except Exception as ex:
             print(ex)
-# p_medicamentos_select
