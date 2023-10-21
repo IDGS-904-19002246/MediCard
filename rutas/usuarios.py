@@ -2,12 +2,10 @@ from flask import Blueprint, redirect, render_template, url_for,request, flash,c
 from flask_login import login_user, login_required, logout_user,current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from itertools import groupby
-from operator import itemgetter
 
 from db import get_connection
 from config import db
 import validaciones
-# from model import Usuarios
 import sys
 sys.path.append("..")
 from modelos.M_usuarios import tbl_usuarios, usuariosF

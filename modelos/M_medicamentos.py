@@ -12,7 +12,7 @@ class tbl_medicamentos(db.Model):
     nombre = db.Column(db.String(64))
     fabricante =db.Column(db.String(64))
 
-    def __init__(self,id, nom, fab):
+    def __init__(self,id , nom, fab):
         self.id_medicamento =  id
         self.nombre = nom
         self.fabricante = fab

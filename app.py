@@ -3,7 +3,6 @@ from flask import session,make_response
 from flask_wtf.csrf import CSRFProtect
 from flask import jsonify
 
-
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from flask import render_template, request, redirect, url_for, jsonify, flash
@@ -28,7 +27,7 @@ from modelos.M_medicamentos import tbl_medicamentos
 from modelos.M_tratamientos import tbl_tratamientos
 from modelos.M_usuarios import tbl_usuarios
 
-# from modelos.usuariosM import Usuarios
+# from modelos.usuariosM import Usuarios0
 # from modelos.productosM import Productos
 # GOOGLE
 from flask_oauthlib.client import OAuth
@@ -41,13 +40,10 @@ csrf = CSRFProtect()
 security = Security()
 
 app.register_blueprint(usu)
+# app.register_blueprint(med)
 
-# app.secret_key = os.urandom(24)
 app.secret_key ='AIzaSyD4_E5TLG6v20vgbWa9OJsbOSgei68q2HE'
 oauth = OAuth(app)
-# google_bp = make_google_blueprint(client_id='585953638316-5s8ml6ebr08c0sevi671elu4tksjm7jj.apps.googleusercontent.com',
-#                                    client_secret='585953638316-5s8ml6ebr08c0sevi671elu4tksjm7jj.apps.googleusercontent.com',
-#                                    redirect_to='nosotros')
 
 google = oauth.remote_app(
     'google',
@@ -62,7 +58,6 @@ google = oauth.remote_app(
     access_token_url='https://accounts.google.com/o/oauth2/token',
     authorize_url='https://accounts.google.com/o/oauth2/auth',
 )
-app.register_blueprint(med)
 # app.register_blueprint(ins)
 # app.register_blueprint(coc)
 
@@ -140,7 +135,7 @@ def logout():
     session.pop('google_token', None)
     response = make_response(redirect(url_for('app.login')))
     return response
-
+    
 
 @app.route('/login/authorized')
 @google.authorized_handler
