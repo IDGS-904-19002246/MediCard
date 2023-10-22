@@ -2,3 +2,6 @@ env/
 __pycache__/
 modelos/__pycache__
 rutas/__pycache__
+
+static/css
+static/js
