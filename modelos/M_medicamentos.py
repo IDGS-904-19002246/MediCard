@@ -10,12 +10,10 @@ class tbl_medicamentos(db.Model):
 
     id_medicamento = db.Column(db.Integer, primary_key = True)
     nombre = db.Column(db.String(64))
-    fabricante =db.Column(db.String(64))
+    fabricante = db.Column(db.String(64))
+    cantidad = db.Column(db.Integer)
+    medida = db.Column(db.String(16))
 
-    def __init__(self,id , nom, fab):
-        self.id_medicamento =  id
-        self.nombre = nom
-        self.fabricante = fab
     
 class medicamentosF():
     def Select():

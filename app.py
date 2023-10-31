@@ -40,7 +40,8 @@ csrf = CSRFProtect()
 security = Security()
 
 app.register_blueprint(usu)
-# app.register_blueprint(med)
+app.register_blueprint(med)
+
 
 app.secret_key ='AIzaSyD4_E5TLG6v20vgbWa9OJsbOSgei68q2HE'
 oauth = OAuth(app)
@@ -68,7 +69,6 @@ login_manager.init_app(app)
 login_manager.login_view = 'usu.login'
 login_manager.login_message = u"Por Favor, Inicie Sesión."
 
-
 @login_manager.user_loader
 def load_user(user_id): return tbl_usuarios.query.get(int(user_id))
 # def load_user(user_id): return session.get(tbl_usuarios, int(user_id))
@@ -81,7 +81,7 @@ def load_user(user_id): return tbl_usuarios.query.get(int(user_id))
 def index():
     medicinas = tbl_medicamentos.query.all()
     medicinas_json = [{"id": medicina.id_medicamento, "nombre": medicina.nombre, "fabricante": medicina.fabricante} for medicina in medicinas]
-    return jsonify({"medicinas": medicinas_json})
+    return jsonify(medicinas_json)
 
 
     # return render_template('index.html', current_user=current_user, )
