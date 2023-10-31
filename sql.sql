@@ -2,7 +2,7 @@
 -- Host:                         127.0.0.1
 -- Versión del servidor:         8.0.30 - MySQL Community Server - GPL
 -- SO del servidor:              Win64
--- HeidiSQL Versión:             12.5.0.6677
+-- HeidiSQL Versión:             12.1.0.6537
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -69,19 +69,38 @@ INSERT INTO `tbl_horarios` (`id_horario`, `fk_id_tratamiento`, `medicina_tomada`
 	(1, 1, b'0', '2023-10-18 18:02:38'),
 	(2, 1, b'0', '2023-10-18 18:06:43');
 
+-- Volcando estructura para tabla idgs1004_medicard.tbl_imagenes
+CREATE TABLE IF NOT EXISTS `tbl_imagenes` (
+  `id_imagen` int NOT NULL AUTO_INCREMENT,
+  `fk_id_medicamento` int DEFAULT NULL,
+  `url` varchar(64) DEFAULT NULL,
+  PRIMARY KEY (`id_imagen`),
+  KEY `FK_tbl_imagenes_tbl_medicamentos` (`fk_id_medicamento`),
+  CONSTRAINT `FK_tbl_imagenes_tbl_medicamentos` FOREIGN KEY (`fk_id_medicamento`) REFERENCES `tbl_medicamentos` (`id_medicamento`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Volcando datos para la tabla idgs1004_medicard.tbl_imagenes: ~3 rows (aproximadamente)
+INSERT INTO `tbl_imagenes` (`id_imagen`, `fk_id_medicamento`, `url`) VALUES
+	(1, 1, 'url.png'),
+	(2, 2, 'url2.png'),
+	(3, 3, 'utl3.png'),
+	(4, 1, 'url.jpg');
+
 -- Volcando estructura para tabla idgs1004_medicard.tbl_medicamentos
 CREATE TABLE IF NOT EXISTS `tbl_medicamentos` (
   `id_medicamento` int NOT NULL AUTO_INCREMENT,
   `nombre` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `fabricante` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `cantidad` int DEFAULT NULL,
+  `medida` varchar(16) DEFAULT NULL,
   PRIMARY KEY (`id_medicamento`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Volcando datos para la tabla idgs1004_medicard.tbl_medicamentos: ~3 rows (aproximadamente)
-INSERT INTO `tbl_medicamentos` (`id_medicamento`, `nombre`, `fabricante`) VALUES
-	(1, 'aspirina', 'fizzer'),
-	(2, 'paracetamol', 'similares'),
-	(3, 'pepto bismol', 'Procter & Gamble Company');
+INSERT INTO `tbl_medicamentos` (`id_medicamento`, `nombre`, `fabricante`, `cantidad`, `medida`) VALUES
+	(1, 'aspirina', 'fizzer', 5, 'tabletas'),
+	(2, 'paracetamol', 'similares', 8, 'pastillas'),
+	(3, 'pepto bismol', 'Procter & Gamble Company', 250, 'ml');
 
 -- Volcando estructura para tabla idgs1004_medicard.tbl_tratamientos
 CREATE TABLE IF NOT EXISTS `tbl_tratamientos` (
@@ -97,9 +116,9 @@ CREATE TABLE IF NOT EXISTS `tbl_tratamientos` (
   KEY `FK_tbl_tratamiento_tbl_medicamentos` (`fk_id_medicamento`),
   CONSTRAINT `FK_tbl_tratamiento_tbl_medicamentos` FOREIGN KEY (`fk_id_medicamento`) REFERENCES `tbl_medicamentos` (`id_medicamento`),
   CONSTRAINT `FK_tbl_tratamiento_tbl_usuarios` FOREIGN KEY (`fk_id_usuario`) REFERENCES `tbl_usuarios` (`id_usuario`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla idgs1004_medicard.tbl_tratamientos: ~1 rows (aproximadamente)
+-- Volcando datos para la tabla idgs1004_medicard.tbl_tratamientos: ~0 rows (aproximadamente)
 INSERT INTO `tbl_tratamientos` (`id_tratamiento`, `fk_id_usuario`, `fk_id_medicamento`, `precio`, `periodo_en_horas`, `fecha_inicio`, `fecha_final`) VALUES
 	(1, 1, 1, 1, 4, '2023-09-13', NULL);
 
