@@ -35,6 +35,34 @@ class tbl_usuarios(UserMixin, db.Model):
             print(ex)
 # ---------------------------------------------------------------------------------
 class usuariosF():
+    def Select():
+        usuarios = []
+        try:
+            connection = get_connection()
+            with connection.cursor() as cursor:
+                cursor.execute('call p_usuarios_select()')
+                # ADMIN
+                usuarios.append(cursor.fetchall())
+                cursor.nextset()
+                # EMPLE
+                usuarios.append(cursor.fetchall())
+                cursor.nextset()
+                # COMUN
+                usuarios.append(cursor.fetchall())
+                cursor.nextset()
+                # BANN
+                usuarios.append(cursor.fetchall())
+                return usuarios
+        except Exception as ex:
+            print(ex)
+    def SelectOneData(id):
+        try:
+            connection = get_connection()
+            with connection.cursor() as cursor:
+                cursor.execute('call p_usuarios_selectOneData(%s)',(id,))
+                return cursor.fetchall()
+        except Exception as ex:
+            print(ex)
     def Insert(nombre,apellidoP,apellidoM,correo,contrasena):
         try:
             connection = get_connection()
@@ -47,137 +75,21 @@ class usuariosF():
                 return resultset
         except Exception as ex:
             print(ex)
-
-
-# class Proveedores(db.Model):
-#     __tablaname__='proveedores'
-
-#     id_proveedor = db.Column(db.Integer, primary_key = True)
-#     nombre=db.Column(db.String(32))
-#     correo=db.Column(db.String(32))
-#     telefono=db.Column(db.String(10))
-#     direccion = db.Column(db.JSON)       
-
-#     def ProveedoresSelectUno(id):
-#         try:
-#             connection = get_connection()
-#             with connection.cursor() as cursor:
-#                 cursor.execute('call ProveedoresSelectUno(%s)',(id,))
-#                 resultset = cursor.fetchall()
-#                 return resultset
-#         except Exception as ex:
-#             print(ex)
-    
-#     # def ProveedoresSelectTodo():
-#     #     try:
-#     #         connection = get_connection()
-#     #         with connection.cursor() as cursor:
-#     #             cursor.execute('call ProveedoresSelectTodo()')
-#     #             resultset = cursor.fetchall()
-#     #             return resultset
-#     #     except Exception as ex:
-#     #         print(ex)
-    
-
-
-
-# class Insumos(db.Model):
-#     __tablaname__='insumos'
-#     id_insumo = db.Column(db.Integer, primary_key = True)
-#     nombre=db.Column(db.String(32))
-
-#     cantidad=db.Column(db.Integer)
-#     cantidad_min=db.Column(db.Integer)
-
-#     caducidad = db.Column(db.JSON)
-
-
-#     def InsumosSelectTodos():
-#         try:
-#             connection = get_connection()
-#             with connection.cursor() as cursor:
-#                 cursor.execute('call InsumosSelectTodos()')
-#                 resultset = cursor.fetchall()
-#                 return resultset
-#         except Exception as ex:
-#             print(ex)
-        
-#     def InsumosDelete(id):
-#         try:
-#             connection = get_connection()
-#             with connection.cursor() as cursor:
-#                 cursor.execute('call InsumosDelete(%s)',(id,))
-#                 connection.commit()
-#                 connection.close()
-#                 return 'ok'
-#         except Exception as ex:
-#             print(ex)
-
-#     def InsumosInsert(nom, can, can_min, med, cad):
-#         try:
-#             connection = get_connection()
-#             with connection.cursor() as cursor:
-#                 cursor.execute('call InsumosInsert(%s,%s,%s,%s,%s)',(nom, can, can_min, med, cad))
-#                 connection.commit()
-#                 connection.close()
-#                 return 'ok'
-#         except Exception as ex:
-#             print(ex)
-    
-#     def InsumosUpdate(id,nom, can, can_min, med,cad):
-#         try:
-#             connection = get_connection()
-#             with connection.cursor() as cursor:
-#                 cursor.execute(
-#                     'call InsumosUpdate(%s,%s,%s,%s,%s,%s)',
-#                     (id,nom, can, can_min, med,cad))
-#                 connection.commit()
-#                 connection.close()
-#                 return 'ok'
-#         except Exception as ex:
-#             print(ex)
-    
-#     def InsumosAdd(id, can, fec, prov, cost):
-#         try:
-#             connection = get_connection()
-#             with connection.cursor() as cursor:
-#                 cursor.execute(
-#                     'call InsumosAdd(%s,%s,%s,%s,%s)',
-#                     (id, can, fec,prov, cost))
-#                 connection.commit()
-#                 connection.close()
-#                 return 'ok'
-#         except Exception as ex:
-#             print(ex)
-    
-#     def InsumosCocinar(id_pro,can):
-#         try:
-#             connection = get_connection()
-#             with connection.cursor() as cursor:
-#                 cursor.execute(
-#                     'call InsumosCocinar(%s,%s)',
-#                     (id_pro, can))
-#                 connection.commit()
-#                 connection.close()
-#                 return 'ok'
-#         except Exception as ex:
-#             print(ex)
-    
-#     def InsumosCocinarValidar(id_pro,can):
-#         try:
-#             connection = get_connection()
-#             with connection.cursor() as cursor:
-#                 cursor.execute( 'call InsumosCocinarValidar(%s,%s)',(id_pro, can))
-#                 return cursor.fetchall()
-#         except Exception as ex:
-#             print(ex)
-
-#     def InsumosCocinando(id_pro):
-#         try:
-#             connection = get_connection()
-#             with connection.cursor() as cursor:
-#                 cursor.execute( 'call InsumosCocinando(%s)',(id_pro,))
-#                 resultset = cursor.fetchall()
-#                 return resultset
-#         except Exception as ex:
-#             print(ex)
+    def UpdateRol(id,rol):
+        try:
+            connection = get_connection()
+            with connection.cursor() as cursor:
+                cursor.execute('call p_usuarios_updateRol(%s,%s)',(id,rol))
+                connection.commit()
+                connection.close()
+        except Exception as ex:
+            print(ex)
+    def UpdatePass(id,new_pass):
+        try:
+            connection = get_connection()
+            with connection.cursor() as cursor:
+                cursor.execute('call p_usuarios_updatePass(%s,%s)',(id,new_pass))
+                connection.commit()
+                connection.close()
+        except Exception as ex:
+            print(ex)

@@ -1,0 +1,76 @@
+{% extends "layout.html" %}
+{% from '_macros.html' import render_firld2 %}
+{% block content %}
+
+<div class="bg-light p-1"></div>
+<div class="p-4 pt-2 back fondo-img" style="--f:url(../static/img/background.png);">
+
+    
+    <div class="p-4 mt-2 g-danger" style="border-radius: 32px 8px 32px 32px;">
+
+        <form action="medicamentos_edit" method="POST" id="form" enctype="multipart/form-data" class="text-light" >
+            <div class="row">
+
+                <div class="col-sm-4">
+                    <div class="m-2">
+                        <input type="file" class="w-100" name="img" id="imgInp" >
+                        <div class="m-2"><img class="w-50" id="blah" src="#" alt="NoHayImagen"></div>
+                    </div>
+                </div>
+                
+                <div class="col-sm-8">
+                    <!-- nombre,fabricante,cantidad,medida,estado,id -->
+                    <div class="m-2">{{render_firld2(form.nombre, class='form-control')}}</div>
+                    <div class="m-2">{{render_firld2(form.fabricante, class='form-control')}}</div>
+                    <div class="m-2">{{render_firld2(form.cantidad, class='form-control')}}</div>
+                    <div class="m-2">
+                        <div class="input-container">
+                            <input class="form-control" id="estado" name="estado" required="" type="text" value="{{form.estado.data}}">
+                            <label for="nombre">Estado</label>
+                        </div>  
+                    </div>
+                    <div class="m-2">
+                        <select class="form-control" id="medida" name="medida">
+                            <option value="ml" {% if form.medida.data == "ml" %}selected{% endif %}>ml</option>
+                            <option value="g" {% if form.medida.data == "g" %}selected{% endif %}>g</option>
+                            <option value="pastillas" {% if form.medida.data == "pastillas" %}selected{% endif %}>pastillas</option>
+                            <option value="píldoras" {% if form.medida.data == "píldoras" %}selected{% endif %}>píldoras</option>
+                        </select>
+                    </div>
+                    <div class="m-2">
+                        <select class="form-control" id="tipo" name="tipo">
+                            {% for t in tipo %}
+                            <option value="{{t.id_tipo}}" {% if form.tipo.data == t.id_tipo %}selected{% endif %}>{{t.nombre}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+
+
+                    <input type="hidden" name="csrf_token" value="{{csrf_token()}}" />
+                    <input type="hidden" name="id_medicamento" value="{{form.id_medicamento.data}}"/>
+                    <button type="submit" class="btn btn-light w-20" form="form">Guardar</button>
+                    <button type="button" class="btn btn-light w-20" onclick="resetear('producto')">Limpiar Datos</button>
+                    <a href="medicamentos"><button type="button" class="btn btn-light w-20">Atrás</button></a>
+
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+
+    function readURL(input) {
+    if (input.files && input.files[0]) { //Revisamos que el input tenga contenido
+        var reader = new FileReader(); //Leemos el contenido
+        reader.onload = function(e) { //Al cargar el contenido lo pasamos como atributo de la imagen de arriba
+        $('#blah').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+    }
+
+    $("#imgInp").change(function() {readURL(this);});
+</script>
+<script src="../../static/form.js"></script>
+{% endblock content %}

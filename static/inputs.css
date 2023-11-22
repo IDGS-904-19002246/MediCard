@@ -31,6 +31,8 @@ input.is-valid+label {
 }
 
 
+
+
 /* ----------------------------------------------------------------------------------------- */
 .form-control.is-valid, .was-validated .form-control:valid {
     border-color: aqua;

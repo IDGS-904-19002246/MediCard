@@ -1,0 +1,160 @@
+{% extends "layout.html" %}
+{% from '_macros.html' import render_firld2 %}
+{% block content %}
+<div class="bg-light p-1"></div>
+<div class="p-4 pt-2 back fondo-img" style="--f:url(../static/img/background.png);">
+
+    <div class="row">
+        <!-- -------------------------------------------------------------------------------- -->
+        <div class="col-sm-3 p-4 mt-2 bg-dark h-25" style="border-radius: 32px 8px 32px 32px;">
+
+            <a href="medicamentos_add"><button class="btn btn-outline-light w-100">Añadir Medicamento</button></a>
+            <hr>
+            <button type="button" class="btn btn-outline-light w-100" id="abrirModal" onclick="form_add()">Añadir categoría</button>
+
+            <ul class="text-light list-unstyled mt-2">
+            {% for l in tipo %}
+            {% if l.id_tipo != 1 %}
+            <li>
+                <div class="row">
+                    <div class="col-md-8">
+                        <span><b>{{l.nombre}}</b></span><br>
+                        <span>{{l.descripcion}}</span>
+                    </div>
+
+                    <div class="col-md-4">
+                        <button class="btn btn-outline-light p-1"onclick='form_tipo("{{ l }}")'><i class="bi bi-pen"></i></button>
+                        <a href="/categoria_delete?id={{l.id_tipo}}"><button class="btn btn-outline-light p-1"><i class="bi bi-trash"></i></button></a>
+                    </div>
+                </div>
+                <hr>
+            </li>
+            {% endif %}
+            {% endfor %}
+            </ul>
+            
+        </div>
+        <!-- -------------------------------------------------------------------------------- -->
+        <div class="col-sm-9 table-responsive bg-opacity" id="U" style="--co:#ffffff80;">
+            <h1 class="text-light text-center">Todos los medicamentos</h1>
+            <div class="h-75" style="overflow: auto;">
+                
+                {% for m in M %}
+
+
+                <div class="tarjeta d-inline-block p-4 rounded text-decoration-none" title="{{m.nombre}}">
+
+                        <div style="position: relative;padding-bottom: 100%;">
+                            <img class="rounded-top" src="../static/img/medicamentos/{{m.fotos[0]}}" alt="Imagen No Disponible">
+                        </div>
+
+                        <h4 class="rounded-bottom bg-light text-dark">{{m.nombre}}</h4>
+
+                        <!-- <button class="Centrado rounded-pill py-1">Ver más</button> -->
+
+                        <div class="rounded-end esconder text-light bg-dark">
+                            <h6>Administración</h6>
+                            <a href="medicamentos_edit?id={{m.id_medicamento}}" ><button class="btn btn-outline-light p-1" onclick='form_tipo("{{ l }}")'><i class="bi bi-pen"></i></button></a>
+                            <a href="medicamentos_delete?id={{m.id_medicamento}}"><button class="btn btn-outline-light p-1"><i class="bi bi-trash"></i></button></a>
+                        </div>
+
+                </div>
+
+                {% endfor %}
+            </div>
+        </div>
+        <!-- -------------------------------------------------------------------------------- -->
+    </div>
+
+    
+</div>
+
+
+
+
+
+
+
+<div class="modal fade" id="miModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title text-light id="exampleModalLabel">Formulario Modal</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Tu formulario aquí -->
+                <form action="/categoria_add" method="POST" id="categoria_add">
+                    
+                    <input type="hidden" id="accion" name="accion" value="add">
+                    <input type="hidden" id="id_tipo" name="id_tipo" value="0">
+                    <input type="hidden" name="csrf_token" value="{{csrf_token()}}" />
+                    <div class="input-container">
+                        <input class="form-control text-dark" id="tipo_nombre" maxlength="32" minlength="4" name="tipo_nombre" type="text" >
+                        <label for="tipo_nombre" class="text-dark">Nombre</label>
+                    </div>
+                    <br>
+                    <div class="input-container">
+                        <input class="form-control text-dark" id="tipo_descripcion" maxlength="32" minlength="4" name="tipo_descripcion" type="text" >
+                        <label for="tipo_descripcion" class="text-dark">Descripción</label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer bg-primary">
+                <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cerrar</button>
+                <button type="submit" class="btn btn-outline-light" form="categoria_add">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../../static/form.js"></script>
+
+<script>
+    $(document).ready(function(){
+        $("#abrirModal").click(function(){
+            $("#miModal").modal("show");
+        });
+        $("#miModal .btn-close").click(function(){
+            $("#miModal").modal("hide");
+        });
+    });
+    function form_add(){
+        $('#accion').val('add');
+        $('#id_tipo').val(0);
+        $('#tipo_nombre').val('');  
+        $('#tipo_descripcion').val('');
+    }
+
+    function form_tipo(x){
+        var item_json = JSON.parse(x.replaceAll("'",'"')); 
+        console.log(item_json);
+        $('#accion').val('update');
+        $('#id_tipo').val(item_json.id_tipo);
+        $('#tipo_nombre').val(item_json.nombre);
+        $('#tipo_descripcion').val(item_json.descripcion);
+        
+        $("#miModal").modal("show");
+    }
+    
+
+
+    // function readURL(input) {
+    // if (input.files && input.files[0]) { //Revisamos que el input tenga contenido
+    //     var reader = new FileReader(); //Leemos el contenido
+    //     reader.onload = function(e) { //Al cargar el contenido lo pasamos como atributo de la imagen de arriba
+    //     $('#blah').attr('src', e.target.result);
+    //     }
+    //     reader.readAsDataURL(input.files[0]);
+    // }}
+    </script>
+    
+
+
+
+
+
+
+
+
+
+{% endblock content %}

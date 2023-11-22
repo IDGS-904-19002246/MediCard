@@ -4,6 +4,7 @@ from flask_wtf.csrf import CSRFProtect
 from flask import jsonify
 
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from flask import render_template, request, redirect, url_for, jsonify, flash
 
@@ -23,8 +24,8 @@ from config import db
 import validaciones
 # MODELOS
 from modelos.M_horarios import tbl_horarios
-from modelos.M_medicamentos import tbl_medicamentos
-from modelos.M_tratamientos import tbl_tratamientos
+from modelos.M_medicamentos import tbl_medicamentos,medicamentosF
+from modelos.M_tratamientos import tbl_tratamientos, tratamientosF
 from modelos.M_usuarios import tbl_usuarios
 
 # from modelos.usuariosM import Usuarios0
@@ -76,11 +77,19 @@ def load_user(user_id): return tbl_usuarios.query.get(int(user_id))
 
 
 
+
+    
+
 @app.route("/index", methods=['GET', 'POST'])
 @app.route("/", methods=['GET', 'POST'])
 def index():
     medicinas = tbl_medicamentos.query.all()
-    medicinas_json = [{"id": medicina.id_medicamento, "nombre": medicina.nombre, "fabricante": medicina.fabricante} for medicina in medicinas]
+    medicinas_json = [{
+        "id": medicina.id_medicamento,
+         "nombre": medicina.nombre,
+         "fabricante": medicina.fabricante
+         }for medicina in medicinas]
+
     return jsonify(medicinas_json)
 
 
@@ -158,7 +167,64 @@ def authorized(resp):
 def get_google_oauth_token(): return session.get('google_token')
 
 
-# app.register_blueprint(pro)
+
+# -------------------------------------------------------------------------------------------------------
+
+
+@app.route("/api/medicamentos_add", methods=['GET','POST'])
+@csrf.exempt
+def api_medicamentos_add():
+    if request.method == 'POST':
+        file = request.files['img']
+        basepath = os.path.dirname(__file__)
+        filename = secure_filename(file.filename)
+        ext = os.path.splitext(filename)[1]
+        nue = request.form.get('nombre')+ext
+        up_path = os.path.join(basepath,'static/img/medicamentos/',nue)
+        file.save(up_path)
+
+        m = medicamentosF.InsertApi(
+            request.form.get('nombre'),
+            request.form.get('fabricante'),
+            request.form.get('cantidad'),
+            request.form.get('medida'),
+            nue,
+            request.form.get('tipo')
+        )
+        return { 'status':'ok','msg':'El medicamento guardado correctamente'}
+    else:
+        return { 'status':'no','msg':'El medicamento no se pudo guardar'}
+
+@app.route("/api/tratamientos_add", methods=['GET','POST'])
+@csrf.exempt
+def api_tratamientos_add():
+    if request.method == 'POST':
+        U = tbl_usuarios.query.get(request.form.get('fk_id_usuario'))
+        M = tbl_medicamentos.query.get(request.form.get('fk_id_medicamento'))
+        if not U or M:
+            return { 'status':'no','msg':'Usuario o medicamento no disponible'}
+        inicio = request.form.get('fecha_inicio')
+        final = request.form.get('fecha_final')
+        t = tbl_tratamientos(
+            request.form.get('fk_id_usuario'),
+            request.form.get('fk_id_medicamento'),
+            request.form.get('precio'),
+            request.form.get('dosis'),
+            request.form.get('periodo_en_horas'),
+            inicio,
+            final
+        )
+        
+        db.session.add(t)
+        db.session.commit()
+
+        h = tratamientosF.Insert(inicio, final, request.form.get('h_horas'))
+        
+        return { 'status':'ok','msg':'El medicamento guardado correctamente'}
+    else:
+        return { 'status':'no','msg':'No se recibió formulario'}
+
+
 
 if __name__ == '__main__':
     csrf.init_app(app)

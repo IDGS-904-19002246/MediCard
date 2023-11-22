@@ -11,7 +11,7 @@ class tbl_horarios(db.Model):
     id_horario = db.Column(db.Integer, primary_key = True)
     
     fk_id_tratamiento = db.Column(db.Integer)
-    medicina_tomada = db.Column(db.Boolean)
+    medicina_tomada = db.Column(db.Integer)
     fecha = db.Column(db.DateTime)
     
     

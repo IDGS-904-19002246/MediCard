@@ -38,7 +38,7 @@ CaracteresNoValidos = [
 ]
 
 def Valido(form,field):
-    if len(field.data) != 0:
+    if len(str(field.data)) != 0:
         for c in str(field.data):
             if c in CaracteresNoValidos:
                 raise validators.ValidationError('''El campo no debe contener ninguno de estos caracteres !#$%&'()*+,/:;<=>?[]^`{|}~"''')
@@ -48,18 +48,18 @@ def NoVacio(form,field):
         raise validators.ValidationError('El campo no tiene datos')
     
 def NoNumeros(form,field):
-    if len(field.data) != 0:
+    if len(str(field.data)) != 0:
         for c in str(field.data):
             if c.isalpha() != True and c != ' ' or c in [0,1,2,3,4,5,6,7,8,9]:
                 raise validators.ValidationError('El campo no debe contener números')
             
 def NoEspacios(form,field):
-    if len(field.data) != 0:
+    if len(str(field.data)) != 0:
         if ' ' in str(field.data):
             raise validators.ValidationError('El campo no debe contener números ni espacios')
         
 def Numeros(form,field):
-    if len(field.data) != 0:
+    if len(str(field.data)) != 0:
         if ' ' in str(field.data) or str(field.data).isnumeric() == False:
             raise validators.ValidationError('El campo debe contener solo números y sin espacios')
 
@@ -73,6 +73,15 @@ class usuarios(Form):
     correo = EmailField('Correo',[validators.Email(message='Dame un correo valido'),NoVacio,NoEspacios,Valido])
     contrasena = PasswordField('Contraseña',[NoVacio,validators.length(min=4,max=16,message='La contraseña debe tener entre 4 y 16 caracteres'),Valido])
     contrasena2 = PasswordField('Repita su Contraseña',[NoVacio,validators.length(min=4,max=16,message='La contraseña debe tener entre 4 y 16 caracteres'),Valido])
+
+class medicamentos(Form):
+    id_medicamento = IntegerField('id_medicamento')
+    nombre = StringField('Nombre',[validators.DataRequired(message='Dato requerido'),Valido])
+    fabricante = StringField('Fabricante',[validators.DataRequired(message='Dato requerido'),Valido])
+    cantidad = IntegerField('Cantidad',[NoVacio,Numeros,Valido])
+    estado = StringField('Estado')
+    medida = StringField('Medida')
+    tipo = IntegerField('Tipo')
 
 class login(Form):
     correo = EmailField('Correo',[validators.Email(message='Dame un correo valido'),NoVacio,NoEspacios,Valido])

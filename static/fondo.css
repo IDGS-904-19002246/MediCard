@@ -7,3 +7,7 @@
 .fondo-trans {
     background-color: var(--co);
 }
+
+.bg-azul{
+    background-color: aqua;
+}

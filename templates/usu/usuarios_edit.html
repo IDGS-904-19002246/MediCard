@@ -1,0 +1,165 @@
+{% extends "layout.html" %}
+{% from '_macros.html' import render_firld2 %}
+{% block content %}
+<div class="bg-light p-1"></div>
+<div class="p-4 pt-2 back fondo-img" style="--f:url(../static/img/background.png);">
+
+    <div class="row">
+        <h2 class="text-light text-center">Mi cuenta</h2>
+    <!-- -------------------------------------------------------------------------------- -->
+
+        <div class="col-sm-3 p-4 mt-2 bg-danger h-25" style="border-radius: 32px 8px 32px 32px;">
+            
+            <ul class="text-light list-unstyled px-4" id="datos">
+                <li><b>Nombre:</b> {{U.nombre}} {{U.apellidoP}} {{U.apellidoM}}</li>
+                <li><b>Correo:</b> {{U.correo}}</li>
+                <li><b>Rol:</b> {{U.rol}}</li>
+                <hr>
+                <button class="btn btn-outline-light w-75 m-2" id="button_editar">Editar mis datos</button>
+                <a href="/usuarios_delete?id={{U.id_usuario}}"><button class="btn btn-outline-light p-1"><i class="bi bi-trash"></i></button></a>
+
+                <!-- <button class="btn btn-outline-light w-100 m-2" id="button_pass">Cambiar contraceña</button> -->
+            </ul>
+
+        </div>
+    <!-- -------------------------------------------------------------------------------- -->
+
+        <div class="col-sm-9 table-responsive bg-opacity" id="U" style="--co:#ffffff80;">
+
+            <h4 class="text-center">Mis tratamientos</h4>
+            <div style="overflow-x: hidden; height: 360px;scrollbar-width:none;">
+
+                {% for l in lista %}
+                <h6 class="fw-bold">Tratamiento con: {{ l.medicina}} </h6>
+                <h6>Iniciado el: {{ l.inicio}} </h6>
+                <h6>Finalizado el: {{ l.final}} </h6>
+
+                    <div class="rounded bg-danger">
+
+                        {% for h in l.horarios %}
+                        <div class="text-light ">
+                            <h6 class="d-inline-block px-4" style="width: 8%;">
+                                {% if h.medicina_tomada == '0' %}Pendiente {% endif %}
+                                {% if h.medicina_tomada == '1' %}Tomada a tiempo {% endif %}
+                                {% if h.medicina_tomada == '2' %}Tomada tarde {% endif %}
+                                {% if h.medicina_tomada == '3' %}Nunca se tomo {% endif %}
+                            </h6>
+                            <h6 class="d-inline-block px-4 float-end">{{ h.fecha }}</h6>
+                            <br>
+                            <!-- <span class="px-4">{{h.descripcion}}</span> -->
+                        </div>
+                        {% endfor %}
+                    
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    <!-- -------------------------------------------------------------------------------- -->
+    </div>
+</div>
+
+
+<!-- -------------------------------------------------------------------------------- -->
+<div class="modal fade" id="form_editar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title text-light" id="exampleModalLabel">Formulario Modal</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body fondo-trans" style="--co:#00000050;">
+                <form action="/usuarios_detalles" method="POST" id="form_editar2">
+                    
+                    <input type="hidden" name="csrf_token" value="{{csrf_token()}}" />
+                    <input type="hidden" id="id_usuario" name="id_usuario" value="{{form.id_usuario.data}}" />
+                    <br>
+                    <div class="m-2">{{render_firld2(form.nombre , class='form-control')}}</div>
+                    <div class="m-2">{{render_firld2(form.apellidoP, class='form-control')}}</div>
+                    <div class="m-2">{{render_firld2(form.apellidoM, class='form-control')}}</div>
+                    <div class="m-2">{{render_firld2(form.correo, class='form-control')}}</div>
+                </form>
+            </div>
+            <div class="modal-footer bg-primary">
+                <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cerrar</button>
+                <button type="submit" class="btn btn-outline-light" form="form_editar2">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- -------------------------------------------------------------------------------- -->
+<!-- <div class="modal fade" id="form_pass" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title text-light" id="exampleModalLabel">Formulario Modal</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/categoria_add" method="POST" id="form_pass2">
+                    
+                    <input type="hidden" id="id_usuario" name="id_usuario" value="{{U.id_usuario}}">
+                    <input type="hidden" name="csrf_token" value="{{csrf_token()}}" />
+                    <div class="input-container">
+                        <input class="form-control text-dark" id="tipo_descripcion" maxlength="32" minlength="4" name="tipo_descripcion" type="text" >
+                        <label for="tipo_descripcion" class="text-dark">Contraseña Actual</label>
+                    </div>
+                    <br>
+                    <div class="input-container">
+                        <input class="form-control text-dark" id="tipo_descripcion" maxlength="32" minlength="4" name="tipo_descripcion" type="text" >
+                        <label for="tipo_descripcion" class="text-dark">Nueva Contraseña</label>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer bg-primary">
+                <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cerrar</button>
+                <button type="submit" class="btn btn-outline-light" form="form_pass2">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div> -->
+<script src="../../static/form.js"></script>
+<script>
+
+    $(document).ready(function(){
+        $("#button_editar").click(function(){
+            $("#form_editar").modal("show");
+        });
+        $("#form_editar .btn-close").click(function(){
+            $("#form_editar").modal("hide");
+        });
+    });
+    // $(document).ready(function(){
+    //     $("#button_pass").click(function(){
+    //         $("#form_pass").modal("show");
+    //     });
+    //     $("#form_pass .btn-close").click(function(){
+    //         $("#form_pass").modal("hide");
+    //     });
+    // });
+    // <!-- -------------------------------------------------------------------------------- -->
+
+    function SelectData(v){
+        var select = document.getElementById("miSelect");
+        select.value = v;
+    }
+    
+
+    function resetear(id){
+        $('#form')[0].reset();
+        $('#blah')[0].src = '#'
+    }
+    function readURL(input) {
+    if (input.files && input.files[0]) { //Revisamos que el input tenga contenido
+        var reader = new FileReader(); //Leemos el contenido
+        reader.onload = function(e) { //Al cargar el contenido lo pasamos como atributo de la imagen de arriba
+        $('#blah').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+    }
+
+    $("#imgInp").change(function() {readURL(this);});
+</script>
+<script src="../../static/form.js"></script>
+{% endblock content %}

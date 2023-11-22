@@ -14,9 +14,20 @@ class tbl_tratamientos(db.Model):
     fk_id_medicamento = db.Column(db.Integer)
 
     precio = db.Column(db.Integer)
+    dosis = db.Column(db.Integer)
     periodo_en_horas = db.Column(db.Integer)
-    fecha_inicio = db.Column(db.Date)
-    fecha_final   = db.Column(db.Date)
+    fecha_inicio = db.Column(db.DateTime)
+    fecha_final   = db.Column(db.DateTime)
     
+class tratamientosF():
+    def Insert(inicio, final,n_horas):
+        try:
+            connection = get_connection()
+            with connection.cursor() as cursor:
+                cursor.execute('call p_horarios_insertAll(%s,%s,%s)',(inicio, final, n_horas))
+                connection.commit()
+                connection.close()
+                return True
+        except Exception as ex: print(ex)
     
 

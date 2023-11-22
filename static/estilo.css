@@ -16,3 +16,20 @@ body {
     background-color: rgba(250,0,0,0.5);
     
 }
+
+/* 
+    .slide-in-up {
+      animation: slideIn 0.5s ease;
+        animation: slideInUp 0.5s ease;
+        
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateY(-100%);
+        }
+        to {
+            transform: translateY(0);
+        }
+    }
+ */
