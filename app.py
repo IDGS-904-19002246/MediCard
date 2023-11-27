@@ -14,6 +14,8 @@ from flask_security import SQLAlchemyUserDatastore
 from config import DevelopmentConfigRoot
 from rutas.usuarios import usu
 from rutas.medicamentos import med
+from rutas.categorias import cat
+
 # from rutas.productos import pro
 # from rutas.insumos import ins
 # from rutas.cocina import coc
@@ -42,6 +44,7 @@ security = Security()
 
 app.register_blueprint(usu)
 app.register_blueprint(med)
+app.register_blueprint(cat)
 
 
 app.secret_key ='AIzaSyD4_E5TLG6v20vgbWa9OJsbOSgei68q2HE'

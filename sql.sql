@@ -2,7 +2,7 @@
 -- Host:                         127.0.0.1
 -- Versión del servidor:         8.0.30 - MySQL Community Server - GPL
 -- SO del servidor:              Win64
--- HeidiSQL Versión:             12.5.0.6677
+-- HeidiSQL Versión:             12.1.0.6537
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -18,6 +18,38 @@
 -- Volcando estructura de base de datos para idgs1004_medicard
 CREATE DATABASE IF NOT EXISTS `idgs1004_medicard` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `idgs1004_medicard`;
+
+-- Volcando estructura para función idgs1004_medicard.f_getgrupos
+DELIMITER //
+CREATE FUNCTION `f_getgrupos`(
+	`id_grupo` INT
+) RETURNS json
+BEGIN
+	DECLARE res JSON;
+			
+			
+	SELECT JSON_ARRAYAGG(JSON_OBJECT(
+     'id_tratamiento', t.id_tratamiento,
+     'medicina', m.nombre,
+     'horarios',( SELECT JSON_ARRAYAGG(JSON_OBJECT(
+		  		'id_horario',h.id_horario,
+		  		'fecha',DATE_FORMAT(h.fecha, '%Y-%m-%d %T' ),
+		  		'medicina_tomada',h.medicina_tomada
+			)) AS d FROM tbl_horarios h WHERE h.fk_id_tratamiento = t.id_tratamiento
+			)
+	)) INTO res
+	
+	FROM tbl_tratamientos AS t
+	INNER JOIN tbl_medicamentos AS m ON t.fk_id_medicamento = m.id_medicamento
+	
+	WHERE (id_grupo IS NULL AND t.fk_id_grupo IS NULL) OR (id_grupo IS NOT NULL AND t.fk_id_grupo = id_grupo);
+
+--			 id OR (id IS NULL AND t.fk_id_grupo IS NULL);
+
+
+	RETURN res;
+END//
+DELIMITER ;
 
 -- Volcando estructura para procedimiento idgs1004_medicard.p_horarios_insertAll
 DELIMITER //
@@ -198,6 +230,36 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Volcando estructura para procedimiento idgs1004_medicard.p_tratamiento_detalles
+DELIMITER //
+CREATE PROCEDURE `p_tratamiento_detalles`(
+	IN `id` INT
+)
+BEGIN
+
+	SELECT
+	t.id_tratamiento,
+	m.nombre AS medicina,
+	(
+		SELECT JSON_ARRAYAGG(
+			JSON_OBJECT(
+				'id_horario',h.id_horario,
+				'fecha', DATE_FORMAT(h.fecha, '%Y-%m-%d %T' ),
+				'medicina_tomada',h.medicina_tomada
+			)
+			
+		) FROM tbl_horarios AS h
+		WHERE h.fk_id_tratamiento = t.id_tratamiento
+	) AS horarios
+	
+	FROM tbl_tratamientos AS t
+	INNER JOIN tbl_medicamentos AS m ON t.fk_id_medicamento = m.id_medicamento
+	
+	WHERE t.fk_id_grupo = id;
+	
+END//
+DELIMITER ;
+
 -- Volcando estructura para procedimiento idgs1004_medicard.p_usuarios_select
 DELIMITER //
 CREATE PROCEDURE `p_usuarios_select`()
@@ -277,7 +339,7 @@ CREATE TABLE IF NOT EXISTS `tbl_grupos` (
   CONSTRAINT `FK_tbl_grupos_tbl_usuarios` FOREIGN KEY (`fk_id_usuario`) REFERENCES `tbl_usuarios` (`id_usuario`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla idgs1004_medicard.tbl_grupos: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla idgs1004_medicard.tbl_grupos: ~2 rows (aproximadamente)
 INSERT INTO `tbl_grupos` (`id_grupo`, `fk_id_usuario`, `nombre`, `tema`) VALUES
 	(1, 4, 'ezquizofrenia', 'blanquito'),
 	(2, 4, 'disfuncion erectil', 'moo');
@@ -347,7 +409,7 @@ CREATE TABLE IF NOT EXISTS `tbl_medicamentos` (
   CONSTRAINT `FK_tbl_medicamentos_tbl_tipos_medicina` FOREIGN KEY (`fk_id_tipo`) REFERENCES `tbl_tipos_medicina` (`id_tipo`)
 ) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla idgs1004_medicard.tbl_medicamentos: ~5 rows (aproximadamente)
+-- Volcando datos para la tabla idgs1004_medicard.tbl_medicamentos: ~6 rows (aproximadamente)
 INSERT INTO `tbl_medicamentos` (`id_medicamento`, `nombre`, `fabricante`, `cantidad`, `medida`, `estado`, `fk_id_tipo`) VALUES
 	(1, 'aspirina 2', 'fizzer', 5, 'ml', 'disponibles', 2),
 	(2, 'paracetamol', 'similares', 8, 'pastillas', 'disponibles', 3),
@@ -364,7 +426,7 @@ CREATE TABLE IF NOT EXISTS `tbl_tipos_medicina` (
   PRIMARY KEY (`id_tipo`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla idgs1004_medicard.tbl_tipos_medicina: ~4 rows (aproximadamente)
+-- Volcando datos para la tabla idgs1004_medicard.tbl_tipos_medicina: ~5 rows (aproximadamente)
 INSERT INTO `tbl_tipos_medicina` (`id_tipo`, `nombre`, `descripcion`) VALUES
 	(1, 'sin categoria', 'no tiene categoria asignada'),
 	(2, 'antiviral', 'palos virus'),
@@ -390,13 +452,13 @@ CREATE TABLE IF NOT EXISTS `tbl_tratamientos` (
   CONSTRAINT `FK_tbl_tratamiento_tbl_medicamentos` FOREIGN KEY (`fk_id_medicamento`) REFERENCES `tbl_medicamentos` (`id_medicamento`),
   CONSTRAINT `FK_tbl_tratamiento_tbl_usuarios` FOREIGN KEY (`fk_id_usuario`) REFERENCES `tbl_usuarios` (`id_usuario`),
   CONSTRAINT `FK_tbl_tratamientos_tbl_grupos` FOREIGN KEY (`fk_id_grupo`) REFERENCES `tbl_grupos` (`id_grupo`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Volcando datos para la tabla idgs1004_medicard.tbl_tratamientos: ~4 rows (aproximadamente)
 INSERT INTO `tbl_tratamientos` (`id_tratamiento`, `fk_id_usuario`, `fk_id_medicamento`, `precio`, `dosis`, `periodo_en_horas`, `fecha_inicio`, `fecha_final`, `fk_id_grupo`) VALUES
 	(1, 4, 1, 1, 2, 4, '2023-09-13 00:00:00', '2023-11-03 00:00:00', 1),
 	(2, 4, 1, 2, 2, 2, '2023-11-03 00:00:00', '2023-11-03 00:00:00', 1),
-	(3, 22, 1, 2, 2, 2, '2023-11-07 18:37:33', '2023-11-08 18:29:10', NULL),
+	(3, 4, 1, 2, 2, 2, '2023-11-07 18:37:33', '2023-11-08 18:29:10', NULL),
 	(4, 4, 3, 2, 2, 3, '2023-11-09 12:36:22', '2023-11-09 12:36:24', 2);
 
 -- Volcando estructura para tabla idgs1004_medicard.tbl_usuarios
@@ -446,6 +508,18 @@ BEGIN
 		'comun'
 	);
 	
+END//
+DELIMITER ;
+
+-- Volcando estructura para procedimiento idgs1004_medicard.xd
+DELIMITER //
+CREATE PROCEDURE `xd`(
+	IN `x` INT,
+	IN `d` VARCHAR(50)
+)
+BEGIN
+
+SELECT *FROM tbl_tratamientos t WHERE t.id_tratamiento = 1;
 END//
 DELIMITER ;
 
