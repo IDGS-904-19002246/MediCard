@@ -35,8 +35,30 @@
             
         </div>
         <!-- -------------------------------------------------------------------------------- -->
-        <div class="col-sm-9 table-responsive bg-opacity" id="U" style="--co:#ffffff80;">
-            <h1 class="text-light text-center">Todos los medicamentos</h1>
+        <div class="col-sm-9 table-responsive" id="U" >
+            <h1 class="text-light text-center">Lista de medicamentos</h1>
+
+            <div class="row m-2">
+                <div class="col-sm-9" >
+                    <div class="input-container p-1">
+                        <input class="form-control fondo-trans" style="--co:#ffffff80;"
+                        id="buscador" name="buscador" required="" type="text" value="" placeholder="Medicamento a buscar ...">
+                    </div>
+                </div>
+                <div class="col-sm-3">
+
+                    <div class="input-container p-1">
+                        <select class="form-control" id="medida" name="medida">
+                            {% for l in tipo %}
+                                <option value="0">Todos</option>                            
+                                <option value="ml">{{l.nombre}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                </div>
+                
+            </div>
             <div class="h-75" style="overflow: auto;">
                 
                 {% for m in M %}

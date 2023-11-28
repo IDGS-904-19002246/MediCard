@@ -37,21 +37,23 @@
 <body>
     <div>
 
-        <nav class="navbar navbar-expand-lg navbar-light g-danger text-light p-0">
+        <nav class="navbar navbar-expand-lg navbar-light p-0">
             <div class="navbar-brand p-0">
                 <img src="../static/img/logo_min.png" style="height: 40px;margin-left: 40px;" alt="NoLogo">
             </div>
             <button class="navbar-toggler" onclick="$('#navbarNav').slideToggle(250);">
-                <span class="navbar-toggler-icon"></span></button>
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
             <div class="navbar-collapse collapse" id="navbarNav">
 
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link text-light" href="/index">Inicio</span></a></li>
-                    <li class="nav-item"><a class="nav-link text-light" href="/productos">Productos</span></a></li>
-                    <li class="nav-item"><a class="nav-link text-light" href="/nosotros">Nosotros</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="/index">Inicio</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="/medicamentos">Medicamentos</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="/nosotros">Nosotros</span></a></li>
 
-                    {% if current_user.is_authenticated and current_user.rol == 'admin' or current_user.rol == 'empleado' %}
+
+                    <!-- {% if current_user.is_authenticated and current_user.rol == 'admin' or current_user.rol == 'empleado' %}
                     
                     <li class="nav-item"><a class="nav-link text-light" onclick="$('#admin').slideToggle(250);">
                         Administración
@@ -68,22 +70,19 @@
                             {%endif%}
                         </div>
                     </li>
-                    {% endif %}
+                    {% endif %} -->
                 </ul>
 
                 <ul class="navbar-nav mr-auto">
                     {% if not current_user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link text-light" href="login">Iniciar Sesión</a>
+                        <a class="nav-link" href="login">Iniciar Sesión</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-light" href="singup">Crear Cuenta</a>
+                        <a class="nav-link" href="singup">Crear Cuenta</a>
                     </li>
                     {%endif%}
                     {% if current_user.is_authenticated  %}
-                    <li class="nav-item float-end">
-                        <a class="nav-link text-light" href="carrito"><i class="bi bi-cart"></i></a>
-                    </li>
                     <li class="nav-item float-end">
                         <a class="nav-link text-light" href="micuenta">Mi Cuenta</a>
                     </li>
@@ -102,7 +101,7 @@
     </div>
 
     <div style="height:90%;width: 100%; background-color: black;">
-        <!-- <h1>{{current_user.nombre}}</h1> -->
+    <div class="bg-danger p-1"></div>
         {% block content %}
 
         {% endblock %}
