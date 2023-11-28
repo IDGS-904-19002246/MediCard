@@ -230,6 +230,25 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Volcando estructura para procedimiento idgs1004_medicard.p_tratamientos_selectForIdUser
+DELIMITER //
+CREATE PROCEDURE `p_tratamientos_selectForIdUser`(
+	IN `id_user` INT
+)
+BEGIN
+	SELECT 
+		IFNULL(g.id_grupo,0) grupo_id,
+		IFNULL(g.nombre,'Sin grupo') grupo_nombre,
+		IFNULL(g.tema,'Sin Tema') grupo_tema,
+		f_getgrupos(g.id_grupo) AS tratamientos
+	--	GROUP_CONCAT(t.fk_id_grupo)
+	FROM tbl_grupos g
+	right JOIN tbl_tratamientos t ON t.fk_id_grupo = g.id_grupo
+	WHERE t.fk_id_usuario = id_user
+	GROUP BY g.id_grupo;
+END//
+DELIMITER ;
+
 -- Volcando estructura para procedimiento idgs1004_medicard.p_tratamiento_detalles
 DELIMITER //
 CREATE PROCEDURE `p_tratamiento_detalles`(
@@ -333,12 +352,12 @@ CREATE TABLE IF NOT EXISTS `tbl_comentarios` (
   `id_comentario` int NOT NULL AUTO_INCREMENT,
   `nombre` varchar(32) DEFAULT NULL,
   `correo` varchar(32) DEFAULT NULL,
-  `mensaje` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `mensaje` varchar(128) DEFAULT NULL,
   `fecha` date DEFAULT NULL,
   PRIMARY KEY (`id_comentario`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla idgs1004_medicard.tbl_comentarios: ~6 rows (aproximadamente)
+-- Volcando datos para la tabla idgs1004_medicard.tbl_comentarios: ~0 rows (aproximadamente)
 INSERT INTO `tbl_comentarios` (`id_comentario`, `nombre`, `correo`, `mensaje`, `fecha`) VALUES
 	(1, 'jaun', 'jj@gmail.com', 'ts buena, curo mi refrujo', '2023-11-28'),
 	(2, 'dsadadadasd', 'dsass@gmail.com', 'dsadasdasd', '2023-11-28'),
@@ -375,7 +394,7 @@ CREATE TABLE IF NOT EXISTS `tbl_horarios` (
   CONSTRAINT `FK_tbl_horario_tbl_tratamientos` FOREIGN KEY (`fk_id_tratamiento`) REFERENCES `tbl_tratamientos` (`id_tratamiento`)
 ) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla idgs1004_medicard.tbl_horarios: ~16 rows (aproximadamente)
+-- Volcando datos para la tabla idgs1004_medicard.tbl_horarios: ~5 rows (aproximadamente)
 INSERT INTO `tbl_horarios` (`id_horario`, `fk_id_tratamiento`, `medicina_tomada`, `fecha`) VALUES
 	(9, 1, 0, '2023-01-01 05:00:00'),
 	(12, 2, 0, '2023-01-01 11:00:00'),
@@ -459,7 +478,7 @@ CREATE TABLE IF NOT EXISTS `tbl_tratamientos` (
   `id_tratamiento` int NOT NULL AUTO_INCREMENT,
   `fk_id_usuario` int DEFAULT NULL,
   `fk_id_medicamento` int DEFAULT NULL,
-  `precio` int DEFAULT NULL,
+  `precio` double DEFAULT NULL,
   `dosis` int DEFAULT NULL,
   `periodo_en_horas` int DEFAULT NULL,
   `fecha_inicio` datetime DEFAULT NULL,
@@ -474,7 +493,7 @@ CREATE TABLE IF NOT EXISTS `tbl_tratamientos` (
   CONSTRAINT `FK_tbl_tratamientos_tbl_grupos` FOREIGN KEY (`fk_id_grupo`) REFERENCES `tbl_grupos` (`id_grupo`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla idgs1004_medicard.tbl_tratamientos: ~4 rows (aproximadamente)
+-- Volcando datos para la tabla idgs1004_medicard.tbl_tratamientos: ~0 rows (aproximadamente)
 INSERT INTO `tbl_tratamientos` (`id_tratamiento`, `fk_id_usuario`, `fk_id_medicamento`, `precio`, `dosis`, `periodo_en_horas`, `fecha_inicio`, `fecha_final`, `fk_id_grupo`) VALUES
 	(1, 4, 1, 1, 2, 4, '2023-09-13 00:00:00', '2023-11-03 00:00:00', 1),
 	(2, 4, 1, 2, 2, 2, '2023-11-03 00:00:00', '2023-11-03 00:00:00', 1),

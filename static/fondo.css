@@ -4,6 +4,10 @@
     background-size: 100% 100%;
     background-image: var(--f);
 }
+.fondo-img-w-auto{
+    background-size: 100% 100%;
+    background-image: var(--f);
+}
 .fondo-trans{
     background-color: var(--co);
 }

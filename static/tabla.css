@@ -3,7 +3,7 @@
     position: relative;
 }
 
-.tarjeta:hover {
+.tarjeta:hover ,.tarjeta_desarrollador:hover{
     background-color: rgba(0, 0, 0, 0.8);
     transition-duration: 0.5s;
 }
@@ -18,7 +18,7 @@
     margin: auto;
 }
 
-.tarjeta .esconder{
+.tarjeta .esconder,.tarjeta_desarrollador .esconder{
     position: absolute;
     top: 8px;
     left: 0px;
@@ -34,7 +34,10 @@
     transition: 0.5s all ease;
 }
 .tarjeta:hover .esconder,
-.tarjeta:active .esconder {
+.tarjeta:active .esconder,
+
+.tarjeta_desarrollador:hover .esconder,
+.tarjeta_desarrollador:active .esconder{
     opacity: 1;
     width: 80%;
 
