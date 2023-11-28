@@ -87,7 +87,13 @@ class login(Form):
     correo = EmailField('Correo',[validators.Email(message='Dame un correo valido'),NoVacio,NoEspacios,Valido])
     contrasena = PasswordField('Contraseña',[NoVacio,validators.length(min=4,max=16,message='La contraseña debe tener entre 4 y 16 caracteres'),Valido])
     
-
+class comentarios(Form):
+    id_comentario = IntegerField('id_comentario')
+    nombre = StringField('nombre',[validators.DataRequired(message='Dato requerido'),Valido, validators.length(min=4, max= 32, message='El campo debe contener entre 4 y 32 caracteres')])
+    correo = EmailField('correo',[validators.DataRequired(message='Dato requerido'),Valido, validators.length(min=4, max= 32, message='El campo debe contener entre 4 y 32 caracteres')])
+    mensaje = StringField('mensaje',[validators.DataRequired(message='Dato requerido'),Valido, validators.length(min=4, max= 128, message='El campo debe contener entre 4 y 128 caracteres')])
+    fecha = StringField('fecha')
+    
 # ----------------------------------------------------------------------------------------------------------------------
 
 class productos(Form):

@@ -16,6 +16,13 @@ body {
     background-color: rgba(250,0,0,0.5);
     
 }
+.user_name{
+    /* background-color: aqua; */
+    background: linear-gradient(to right, #ffffff,60%, #00000000);
+    color: black;
+    border-radius: 32px 32px 32px 8px;
+
+}
 
 /* 
     .slide-in-up {

@@ -11,3 +11,6 @@
 .bg-azul{
     background-color: aqua;
 }
+.fondo-degradado{
+    background: linear-gradient(to bottom right, #ffffff,80%, #00000000);
+}

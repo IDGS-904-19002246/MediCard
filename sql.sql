@@ -328,6 +328,26 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Volcando estructura para tabla idgs1004_medicard.tbl_comentarios
+CREATE TABLE IF NOT EXISTS `tbl_comentarios` (
+  `id_comentario` int NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(32) DEFAULT NULL,
+  `correo` varchar(32) DEFAULT NULL,
+  `mensaje` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `fecha` date DEFAULT NULL,
+  PRIMARY KEY (`id_comentario`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Volcando datos para la tabla idgs1004_medicard.tbl_comentarios: ~6 rows (aproximadamente)
+INSERT INTO `tbl_comentarios` (`id_comentario`, `nombre`, `correo`, `mensaje`, `fecha`) VALUES
+	(1, 'jaun', 'jj@gmail.com', 'ts buena, curo mi refrujo', '2023-11-28'),
+	(2, 'dsadadadasd', 'dsass@gmail.com', 'dsadasdasd', '2023-11-28'),
+	(3, 'dsadadadasda', 'dsass@gmail.com', 'dsadsa dsssss sssss sssssssss ssssssss ssssssssssss dsadsa dsssss sssss sssssssss ssssssss ssssssssssss', '2023-11-28'),
+	(4, 'jaun', 'jj@gmail.com', 'ts buena, curo mi refrujo', '2023-11-28'),
+	(5, 'jaun', 'jj@gmail.com', 'ts buena, curo mi refrujo', '2023-11-28'),
+	(6, 'jaun', 'jj@gmail.com', 'ts buena, curo mi refrujo', '2023-11-28'),
+	(7, 'ddsdsd', 'dsddsd@gmail.com', 'dsddsadasdasdas', '2023-11-28');
+
 -- Volcando estructura para tabla idgs1004_medicard.tbl_grupos
 CREATE TABLE IF NOT EXISTS `tbl_grupos` (
   `id_grupo` int NOT NULL AUTO_INCREMENT,

@@ -1,7 +1,6 @@
 {% extends "layout.html" %}
 {% from '_macros.html' import render_firld2 %}
 {% block content %}
-<div class="bg-light p-1"></div>
 <div class="p-4 pt-2 back fondo-img" style="--f:url(../static/img/background.png);">
 
     <div class="row">
@@ -35,17 +34,16 @@
             
         </div>
         <!-- -------------------------------------------------------------------------------- -->
-        <div class="col-sm-9 table-responsive" id="U" >
+        <div class="col-sm-9 " id="U" >
             <h1 class="text-light text-center">Lista de medicamentos</h1>
 
             <div class="row m-2">
-                <div class="col-sm-9" >
-                    <div class="input-container p-1">
-                        <input class="form-control fondo-trans" style="--co:#ffffff80;"
-                        id="buscador" name="buscador" required="" type="text" value="" placeholder="Medicamento a buscar ...">
+                <div class="col-sm-8" >
+                    <div class="input-container p-1 fondo-trans" style="--co:#00000080;">
+                        <input class="form-control " id="buscador" name="buscador" required="" type="text" value="" placeholder="Medicamento a buscar ...">
                     </div>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-2">
 
                     <div class="input-container p-1">
                         <select class="form-control" id="medida" name="medida">
@@ -56,6 +54,12 @@
                         </select>
                     </div>
                     
+                </div>
+
+                <div class="col-sm-2">
+                    <div class="input-container p-1 fondo-trans" style="--co:#00000080;">
+                    <button type="button" class="btn btn-outline-light w-100">Buscar <i class="bi bi-person-plus-fill"></i></button>
+                </div>
                 </div>
                 
             </div>

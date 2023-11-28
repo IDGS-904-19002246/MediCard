@@ -15,6 +15,7 @@ from config import DevelopmentConfigRoot
 from rutas.usuarios import usu
 from rutas.medicamentos import med
 from rutas.categorias import cat
+from rutas.index  import ind
 
 # from rutas.productos import pro
 # from rutas.insumos import ins
@@ -45,6 +46,8 @@ security = Security()
 app.register_blueprint(usu)
 app.register_blueprint(med)
 app.register_blueprint(cat)
+app.register_blueprint(ind)
+
 
 
 app.secret_key ='AIzaSyD4_E5TLG6v20vgbWa9OJsbOSgei68q2HE'
@@ -88,14 +91,15 @@ def load_user(user_id): return tbl_usuarios.query.get(int(user_id))
 @app.route("/index", methods=['GET', 'POST'])
 @app.route("/", methods=['GET', 'POST'])
 def index():
-    return render_template('index.html')
+    return render_template('index/index.html')
 
 
     # return render_template('index.html', current_user=current_user, )
 
 
 @app.route("/nosotros", methods=['GET'])
-def nosotros(): return render_template('nosotros.html',current_user=current_user)
+def nosotros(): return render_template('index/nosotros.html',current_user=current_user)
+
 
         # return google.authorize(callback=url_for('authorized', _external=True))
 
