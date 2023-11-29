@@ -19,10 +19,10 @@
 
 
 
-        <div class="col-sm-9 table-responsive bg-opacity" id="U" style="--co:#ffffff80;">
+        <div class="col-sm-9 bg-opacity" id="U" style="--co:#ffffff80;">
             
 
-            <div class="p-2 table collapse" id="ADMIN">
+            <div class="p-2 collapse" id="ADMIN">
                 {% if not ADMIN|length == 0%}
                 <h4>Administradores</h4>
                     {% for A in ADMIN %}
@@ -41,7 +41,7 @@
                 {% endif %}
             </div>
 
-            <div class="p-2 table collapse" id="EMPLE">
+            <div class="p-2 collapse" id="EMPLE">
                 {% if not EMPLE|length == 0%}
                 <h4>Empleados</h4>
                     {% for E in EMPLE %}
@@ -60,7 +60,7 @@
                 {% endif %}
             </div>
 
-            <div class="p-2 table collapse" id="COMUN">
+            <div class="p-2 collapse" id="COMUN">
                 {% if not COMUN|length == 0%}
                 <h4>Clientes</h4>
                     {% for C in COMUN %}
@@ -79,7 +79,7 @@
                 {% endif %}
             </div>
 
-            <div class="p-2 table collapse" id="BANN">
+            <div class="p-2 collapse" id="BANN">
                 {% if not BANN|length == 0%}
                 <h4>Clientes</h4>
                     {% for B in BANN %}

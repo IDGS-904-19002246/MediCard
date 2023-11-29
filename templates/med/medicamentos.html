@@ -2,7 +2,9 @@
 {% from '_macros.html' import render_firld2 %}
 {% block content %}
 <div class="p-4 pt-2 back fondo-img" style="--f:url(../static/img/background.png);">
-
+    <div id="U">
+        <h3 class="collapse">Elemento1</h3>
+    </div>
     <div class="row">
         <!-- -------------------------------------------------------------------------------- -->
         <div class="col-sm-3 p-4 mt-2 bg-dark h-25" style="border-radius: 32px 8px 32px 32px;">
@@ -22,7 +24,7 @@
                     </div>
 
                     <div class="col-md-4">
-                        <button class="btn btn-outline-light p-1"onclick='form_tipo("{{ l }}")'><i class="bi bi-pen"></i></button>
+                        <button class="btn btn-outline-light p-1" onclick='form_tipo("{{ l }}")'><i class="bi bi-pen"></i></button>
                         <a href="/categoria_delete?id={{l.id_tipo}}"><button class="btn btn-outline-light p-1"><i class="bi bi-trash"></i></button></a>
                     </div>
                 </div>
@@ -34,22 +36,22 @@
             
         </div>
         <!-- -------------------------------------------------------------------------------- -->
-        <div class="col-sm-9 " id="U" >
+        <div class="col-sm-9 "  >
             <h1 class="text-light text-center">Lista de medicamentos</h1>
 
             <div class="row m-2">
                 <div class="col-sm-8" >
                     <div class="input-container p-1 fondo-trans" style="--co:#00000080;">
-                        <input class="form-control " id="buscador" name="buscador" required="" type="text" value="" placeholder="Medicamento a buscar ...">
+                        <input class="form-control " id="buscar_nombre" name="buscar_nombre" required="" type="text" value="" placeholder="Medicamento a buscar ..."
+                        oninput="buscar()">
                     </div>
                 </div>
                 <div class="col-sm-2">
 
                     <div class="input-container p-1">
-                        <select class="form-control" id="medida" name="medida">
+                        <select class="form-control" id="buscar_tipo" name="buscar_tipo" oninput="buscar()"> 
                             {% for l in tipo %}
-                                <option value="0">Todos</option>                            
-                                <option value="ml">{{l.nombre}}</option>
+                                <option value="{{l.nombre}}">{{l.nombre}}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -58,7 +60,7 @@
 
                 <div class="col-sm-2">
                     <div class="input-container p-1 fondo-trans" style="--co:#00000080;">
-                    <button type="button" class="btn btn-outline-light w-100">Buscar <i class="bi bi-person-plus-fill"></i></button>
+                    <button type="button" class="btn btn-outline-light w-100" onclick="$('.collapse').slideToggle(200);">Buscar <i class="bi bi-person-plus-fill"></i></button>
                 </div>
                 </div>
                 
@@ -66,27 +68,21 @@
             <div class="h-75" style="overflow: auto;">
                 
                 {% for m in M %}
+                <div class="tarjeta p-4 rounded text-decoration-none {{m.tipo}}" title="{{m.nombre}}" >
+                    <div style="position: relative;padding-bottom: 100%;">
+                        <img class="rounded-top" src="../static/img/medicamentos/{{m.fotos[0]}}" alt="Imagen No Disponible">
+                    </div>
 
+                    <h4 class="rounded-bottom bg-light text-dark">{{m.nombre}}</h4>
 
-                <div class="tarjeta d-inline-block p-4 rounded text-decoration-none" title="{{m.nombre}}">
-
-                        <div style="position: relative;padding-bottom: 100%;">
-                            <img class="rounded-top" src="../static/img/medicamentos/{{m.fotos[0]}}" alt="Imagen No Disponible">
-                        </div>
-
-                        <h4 class="rounded-bottom bg-light text-dark">{{m.nombre}}</h4>
-
-                        <!-- <button class="Centrado rounded-pill py-1">Ver más</button> -->
-
-                        <div class="rounded-end esconder text-light bg-dark">
-                            <h6>Administración</h6>
-                            <a href="medicamentos_edit?id={{m.id_medicamento}}" ><button class="btn btn-outline-light p-1" onclick='form_tipo("{{ l }}")'><i class="bi bi-pen"></i></button></a>
-                            <a href="medicamentos_delete?id={{m.id_medicamento}}"><button class="btn btn-outline-light p-1"><i class="bi bi-trash"></i></button></a>
-                        </div>
-
+                    <div class="rounded-end esconder text-light bg-dark">
+                        <h6>Administración</h6>
+                        <a href="medicamentos_edit?id={{m.id_medicamento}}" ><button class="btn btn-outline-light p-1" onclick='form_tipo("{{ l }}")'><i class="bi bi-pen"></i></button></a>
+                        <a href="medicamentos_delete?id={{m.id_medicamento}}"><button class="btn btn-outline-light p-1"><i class="bi bi-trash"></i></button></a>
+                    </div>
                 </div>
-
                 {% endfor %}
+                
             </div>
         </div>
         <!-- -------------------------------------------------------------------------------- -->
@@ -162,6 +158,41 @@
         $("#miModal").modal("show");
     }
     
+    function buscar() {
+        const nombre = $('#buscar_nombre')[0].value;
+        const tipo = $('#buscar_tipo')[0].value;
+        
+        enconder(nombre,tipo);
+
+    }
+    function enconder(nombre, tipo) {
+        if (tipo == 'sin categoria' && nombre == '') {
+            $('.tarjeta').removeClass('d-none');
+        }
+        if (tipo != 'sin categoria' && nombre == '') {
+            $('.tarjeta').addClass('d-none');
+            $('.'+tipo).removeClass('d-none');
+        }
+        // ------------------------------------------
+        // if (nombre != '' && tipo == 'sin categoria') {
+        //     var medicinas = $('.tarjeta');
+        //     $('.tarjeta').addClass('d-none');
+        //     medicinas.each(function () {
+        //         if ($(this).attr('title').includes(nombre)) {
+        //             $(this).removeClass('d-none');
+        //         }
+        //     });
+        // }
+        // if (nombre != '' && tipo != 'sin categoria') {
+        //     $('.tarjeta').addClass('d-none');
+        //     var medicinas = $('.tarjeta');
+        //     medicinas.each(function () {
+        //         if ($(this).attr('title').includes(nombre) && $(this).attr('class').includes(tipo)) {
+        //             $(this).removeClass('d-none');
+        //         }
+        //     });
+        // }
+    }
 
 
     // function readURL(input) {
