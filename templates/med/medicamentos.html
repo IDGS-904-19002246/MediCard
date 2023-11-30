@@ -2,22 +2,20 @@
 {% from '_macros.html' import render_firld2 %}
 {% block content %}
 <div class="p-4 pt-2 back fondo-img" style="--f:url(../static/img/background.png);">
-    <div id="U">
-        <h3 class="collapse">Elemento1</h3>
-    </div>
-    <div class="row">
+
+    <div class="row h-100">
         <!-- -------------------------------------------------------------------------------- -->
-        <div class="col-sm-3 p-4 mt-2 bg-dark h-25" style="border-radius: 32px 8px 32px 32px;">
+        <div class="col-sm-3 h-100 p-4 mt-2 bg-dark h-25" style="border-radius: 32px 8px 32px 32px;">
 
             <a href="medicamentos_add"><button class="btn btn-outline-light w-100">Añadir Medicamento</button></a>
             <hr>
             <button type="button" class="btn btn-outline-light w-100" id="abrirModal" onclick="form_add()">Añadir categoría</button>
 
-            <ul class="text-light list-unstyled mt-2">
+            <ul class="text-light list-unstyled mt-2 h-75" style="overflow: auto; height: 100px;">
             {% for l in tipo %}
             {% if l.id_tipo != 1 %}
             <li>
-                <div class="row">
+                <div class="row w-100 ">
                     <div class="col-md-8">
                         <span><b>{{l.nombre}}</b></span><br>
                         <span>{{l.descripcion}}</span>
@@ -36,17 +34,17 @@
             
         </div>
         <!-- -------------------------------------------------------------------------------- -->
-        <div class="col-sm-9 "  >
+        <div class="col-sm-9 h-100"  >
             <h1 class="text-light text-center">Lista de medicamentos</h1>
 
             <div class="row m-2">
-                <div class="col-sm-8" >
+                <div class="col-sm-9" >
                     <div class="input-container p-1 fondo-trans" style="--co:#00000080;">
                         <input class="form-control " id="buscar_nombre" name="buscar_nombre" required="" type="text" value="" placeholder="Medicamento a buscar ..."
                         oninput="buscar()">
                     </div>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm-3">
 
                     <div class="input-container p-1">
                         <select class="form-control" id="buscar_tipo" name="buscar_tipo" oninput="buscar()"> 
@@ -56,12 +54,6 @@
                         </select>
                     </div>
                     
-                </div>
-
-                <div class="col-sm-2">
-                    <div class="input-container p-1 fondo-trans" style="--co:#00000080;">
-                    <button type="button" class="btn btn-outline-light w-100" onclick="$('.collapse').slideToggle(200);">Buscar <i class="bi bi-person-plus-fill"></i></button>
-                </div>
                 </div>
                 
             </div>

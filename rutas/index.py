@@ -15,6 +15,7 @@ import io
 import base64
 # pip install Flask matplotlib
 # pip install pandas
+# pip install plotly
 
 
 
@@ -50,19 +51,25 @@ def opina_post():
         
     return redirect(url_for('ind.opina'))
     
-@ind.route("/dashbord")
-def dashbord():
+@ind.route("/dashboard")
+def dashboard():
 
-
-    data = {'Categoría 1': 20, 'Categoría 2': 35, 'Categoría 3': 15}
+    data = {
+        'aspirina 2': 12,
+        'paracetamol': 1,
+        'pepto bismol': 12,
+        'aspirina 22': 12,
+        'paracetamol2': 11,
+        'pepto bismol2': 123
+        }
 
     # Generar la gráfica de barras con Plotly
-    fig = px.bar(x=list(data.keys()), y=list(data.values()), labels={'x':'Categorías', 'y':'Valores'}, title='Gráfica de Barras')
-
+    fig = px.bar(x=list(data.keys()), y=list(data.values()),
+        labels={'x':'Medicamentos', 'y':'N. Tratamientos'}, title='Top 7 Medicamentos')
     # Guardar la gráfica en formato HTML
     graph_html = plot(fig, output_type='div')
 
-    return render_template('index/dashbord.html', graph_html=graph_html)
+    return render_template('index/dashboard.html', graph_html=graph_html)
     return render_template('index/dashbord.html')
 
 
