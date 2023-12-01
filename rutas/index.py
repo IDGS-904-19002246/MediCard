@@ -53,12 +53,12 @@ def opina_post():
         
     return redirect(url_for('ind.opina'))
     
-@ind.route("/dashbord")
+@ind.route("/dashboard")
 def dashbord():
 
-fecha = str(datetime.now())[:10]
-    grafica7_grudo = graficasF.grafica_top7medicinas(fecha)
-    grafica7 = {G[0]: G[1] for G in grafica7_grudo}
+    fecha = str(datetime.now())[:10]
+    medicinas7_grudo = graficasF.grafica_top7medicinas(fecha)
+    medicinas7 = {G[0]: G[1] for G in medicinas7_grudo}
 
     graficaUsuarios = [{
         'usu':G[0],
@@ -79,22 +79,20 @@ fecha = str(datetime.now())[:10]
     fig_html = fig.to_html(full_html = False)
 # -----------------------------------------------------------------------------------------
     # Generar la gráfica de barras con Plotly
-    fig = px.bar(x=list(data.keys()), y=list(data.values()), labels={'x':'Categorías', 'y':'Valores'}, title='Gráfica de Barras')
-
-    fig = px.bar(x=list(grafica7.keys()), y=list(grafica7.values()),
+    medicinas_ok = px.bar(x=list(medicinas7.keys()), y=list(medicinas7.values()),
         labels={'x':'Medicamento', 'y':'Tratamientos'}, title='Top 7 Medicamentos')
     # Guardar la gráfica en formato HTML
-    graph_html = plot(fig, output_type='div')
+    medicinas_html = plot(medicinas_ok, output_type='div')
 
-    # return render_template('index/dashbord.html', graph_html=graph_html)
+    # return render_template('index/dashbord.html', medicinas_html=medicinas_html)
     # return render_template('index/dashbord.html')
     pastel_cocinado = px.pie(names= pastel_label, values=pastel_values,title='Empresas con más presencia')
     pastel_html = pastel_cocinado.to_html(full_html = False)
     # pastel_html = plot(pastel_cocinado, output_type='div')
 
     return render_template(
-        'index/dashbord.html',
-        graph_html=graph_html,
+        'index/dashboard.html',
+        medicinas_html=medicinas_html,
         usu = graficaUsuarios,
         pastel_html = pastel_html,
         lineas_hmtl =  fig_html
