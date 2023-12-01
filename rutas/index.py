@@ -53,10 +53,15 @@ def opina_post():
         
     return redirect(url_for('ind.opina'))
     
-@ind.route("/dashboard")
+@ind.route("/dashboard", methods=['GET','POST'])
 def dashbord():
 
     fecha = str(datetime.now())[:10]
+    # if method.
+    if request.method == 'POST':
+        fecha =  str(datetime(
+            int(request.form.get('anyo')),
+            int(request.form.get('mes')), 1))[:10]
     medicinas7_grudo = graficasF.grafica_top7medicinas(fecha)
     medicinas7 = {G[0]: G[1] for G in medicinas7_grudo}
 
@@ -69,14 +74,16 @@ def dashbord():
     pastel_label = [G[0] for G in pastel_crudo]
     pastel_values = [G[1] for G in pastel_crudo]
 
-    data = {
-        'x':[1,2,3,4],
-        'y1':[1,3,5,6],
-        'y2':[1,66,6,90]
-        }
+    tipos_grudo = graficasF.grafica_lineas(fecha)
+    tipos = {G[0]: G[1] for G in tipos_grudo}
+    # data = {
+    #     'x':[1,2,3,4],
+    #     'y1':[1,3,5,6],
+    #     'y2':[1,66,6,90]
+    #     }
 
-    fig  = px.line(data, x ='x', y=['y1','y2'], labels={'value':'Valor','variable':'lineas'})
-    fig_html = fig.to_html(full_html = False)
+    # fig  = px.line(data, x ='x', y=['y1','y2'], labels={'value':'Valor','variable':'lineas'})
+    # fig_html = fig.to_html(full_html = False)
 # -----------------------------------------------------------------------------------------
     # Generar la gráfica de barras con Plotly
     medicinas_ok = px.bar(x=list(medicinas7.keys()), y=list(medicinas7.values()),
@@ -84,18 +91,21 @@ def dashbord():
     # Guardar la gráfica en formato HTML
     medicinas_html = plot(medicinas_ok, output_type='div')
 
-    # return render_template('index/dashbord.html', medicinas_html=medicinas_html)
-    # return render_template('index/dashbord.html')
     pastel_cocinado = px.pie(names= pastel_label, values=pastel_values,title='Empresas con más presencia')
     pastel_html = pastel_cocinado.to_html(full_html = False)
-    # pastel_html = plot(pastel_cocinado, output_type='div')
+
+    tipos_ok = px.bar(x=list(tipos.keys()), y=list(tipos.values()),
+        labels={'x':'Categorias', 'y':'Tratamientos'}, title='Top 7 cartegorias con mas precencia ')
+    # Guardar la gráfica en formato HTML
+    tipo_html = plot(tipos_ok, output_type='div')
 
     return render_template(
         'index/dashboard.html',
         medicinas_html=medicinas_html,
         usu = graficaUsuarios,
         pastel_html = pastel_html,
-        lineas_hmtl =  fig_html
+        tipo_html = tipo_html,
+        mes = fecha[5:7]
         )
 
 

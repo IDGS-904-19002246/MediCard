@@ -1,29 +1,66 @@
 {% extends "layout_bashbord.html" %}
 
 {% block content %}
-<div class="fondo-img-w-auto" style="--f:url(../static/img/background.png);">
-    <div class="p-4">
-        <div class="row px-5 text-light">
+<div class="p-4 pt-2 fondo-img-w-auto" style="--f:url(../static/img/background.png);">
+    <form action="dashboard" method="post">
+        <div class="row h-75 text-light">
+            <div class="col-md-2"></div>
 
-            <div class="col-md-9">
+            <div class="col-md-2" >
+                <div class="input-container p-1 fondo-trans" style="--co:#00000080; height: 40px;">
+                    <input class="form-control" name="anyo"
+                    required="" type="number" value="2023" placeholder="Año ..."
+                    max="2023" min="2023">
+                </div>
+            </div>
+            <div class="col-md-4" >
+                <div class="input-container p-1 fondo-trans" style="--co:#00000080; height: 40px;">
+                    <select class="form-control h-100" name="mes" value="{{mes}}"> 
+                        <option value="10" {% if "10" == mes %}selected{% endif %}>Octubre</option>
+                        <option value="11" {% if "11" == mes %}selected{% endif %}>Noviembre</option>
+                        <option value="12" {% if "12" == mes %}selected{% endif %}>Diciembre</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-2" >
+                <input type="hidden" name="csrf_token" value="{{csrf_token()}}" />
+
+                <button type="submit" class="btn btn-outline-light p-1
+                fondo-trans" style="--co:#00000080; height: 40px;"
+                >Ir al mes</button>
+            </div>
+
+            <div class="col-md-2"></div>
+        </div>
+    </form>
+        <div class="row h-75 text-light">
+
+            <div class="col-md-8 h-100 p-4">
                 {{ medicinas_html|safe }}
             </div>
 
-            <div class="col-md-3 p-4 mt-2 bg-dark h-25">
+            <div class="col-sm-4 h-100  ">
+                <div class="bg-dark m-4 p-4" style="border-radius: 32px 8px 32px 32px;">
                 <ul class="text-light list-unstyled mt-2">
-                <li>
-                    <div class="row">
-                        <div class="col md-9">Usuario</div>
-                        <div class="col md-3">N.Tratamientos</div>
-                    </div>
-                </li>
+                    <li>
+                        <div class="row m-2">
+                            <div class="col md-9"><b>Usuario</b></div>
+                            <div class="col md-3"><b>N.Tratamientos</b></div>
+                        </div>
+                    </li>
+                    <div class="bg-danger pt-1" ></div>
+                </ul>
+                
+
+                <ul class="text-light list-unstyled mt-2 h-75"
+                    style="overflow: auto;">
                 {% for u in usu %}
-                <li>
-                    <div class="row">
-                        <div class="col-md-9">
+                <li >
+                    <div class="row w-100">
+                        <div class="col-md-10">
                             <span><b>{{u.usu}}</b></span><br>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <span>{{u.tra}}</span>
                         </div>
                     </div>
@@ -32,19 +69,22 @@
                 {% endfor %}
                 </ul>
             </div>
-
+            </div>
         </div>
 
+
         <br>
+        <div class="bg-danger p-1"></div><br>
+
         <div class="row px-5 text-light">
+            
+            <div class="col-md-6">
+                {{ tipo_html|safe }}
+            </div>
             <div class="col-md-6">
                 {{ pastel_html|safe }}
             </div>
-            <div class="col-md-6">
-                {{ lineas_hmtl|safe }}
-            </div>
         </div>
-    </div>
 </div>
 
 {% endblock content %}

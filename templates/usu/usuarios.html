@@ -1,7 +1,6 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<div class="bg-light p-1"></div>
 <div class="p-4 pt-2 back fondo-img" style="--f:url(../static/img/background.png);">
     <!-- <h1 class="text-light text-center">Todos los medicamentos</h1> -->
     <!-- -------------------------------------------------------------------------------- -->
@@ -10,7 +9,7 @@
         <div class="col-sm-3 p-4 mt-2 bg-danger h-25" style="border-radius: 32px 8px 32px 32px;">
             <h4 class="text-light text-center">Tipos de usuarios</h4>
             <button class="btn btn-outline-light w-100 m-2" onclick="$('#U .collapse').slideUp(200); $('#ADMIN').slideToggle(250);">Administradores</button><br>
-            <button class="btn btn-outline-light w-100 m-2" onclick="$('#U .collapse').slideUp(200); $('#EMPLE').slideToggle(250);">Empleados</button><br>
+            <!-- <button class="btn btn-outline-light w-100 m-2" onclick="$('#U .collapse').slideUp(200); $('#EMPLE').slideToggle(250);">Empleados</button><br> -->
             <button class="btn btn-outline-light w-100 m-2" onclick="$('#U .collapse').slideUp(200); $('#COMUN').slideToggle(250);">Comunes</button><br>
             <button class="btn btn-outline-light w-100 m-2" onclick="$('#U .collapse').slideUp(200); $('#BANN').slideToggle(250);">Baneados/Eliminados</button><br>
         </div>
@@ -30,7 +29,7 @@
                         <h5><b>#{{A.id_usuario}}</b> {{A.nombre }}</h5>
                         <h6>{{A.correo }}</h6>
                         <div>
-                            <a href="usuarios_rol?id={{A.id_usuario}}&es=EMPLE" class="p-0"><button class="btn btn-danger bg-danger py-0 my-2">Empleado</button></a>
+                            <!-- <a href="usuarios_rol?id={{A.id_usuario}}&es=EMPLE" class="p-0"><button class="btn btn-danger bg-danger py-0 my-2">Empleado</button></a> -->
                             <a href="usuarios_rol?id={{A.id_usuario}}&es=COMUN" class="p-0"><button class="btn btn-danger bg-danger py-0 my-2">Cliente</button></a>
                             <a href="usuarios_rol?id={{A.id_usuario}}&es=BANN" class="p-0"><button class="btn btn-danger bg-danger py-0 my-2">Banear</button></a>
                         </div>
@@ -41,7 +40,7 @@
                 {% endif %}
             </div>
 
-            <div class="p-2 collapse" id="EMPLE">
+            <!-- <div class="p-2 collapse" id="EMPLE">
                 {% if not EMPLE|length == 0%}
                 <h4>Empleados</h4>
                     {% for E in EMPLE %}
@@ -58,7 +57,7 @@
                 {%else%}
                 <h4>No hay Empleados</h4>
                 {% endif %}
-            </div>
+            </div> -->
 
             <div class="p-2 collapse" id="COMUN">
                 {% if not COMUN|length == 0%}
@@ -69,7 +68,7 @@
                         <h6>{{C.correo}}</h6>
                         <div>
                             <a href="usuarios_rol?id={{C.id_usuario}}&es=ADMIN" class="p-0"><button class="btn btn-danger bg-danger py-0 my-2">Administrador</button></a>
-                            <a href="usuarios_rol?id={{C.id_usuario}}&es=EMPLE" class="p-0"><button class="btn btn-danger bg-danger py-0 my-2">Empleado</button></a>
+                            <!-- <a href="usuarios_rol?id={{C.id_usuario}}&es=EMPLE" class="p-0"><button class="btn btn-danger bg-danger py-0 my-2">Empleado</button></a> -->
                             <a href="usuarios_rol?id={{C.id_usuario}}&es=BANN" class="p-0"><button class="btn btn-danger bg-danger py-0 my-2">Banear</button></a>
                         </div>
                     </div>
@@ -88,7 +87,7 @@
                         <h6>{{B.correo }}</h6>
                         <div>
                             <a href="usuarios_rol?id={{B.id_usuario}}&es=ADMIN" class="p-0"><button class="btn btn-danger bg-danger py-0 my-2">Administrador</button></a>
-                            <a href="usuarios_rol?id={{B.id_usuario}}&es=EMPLE" class="p-0"><button class="btn btn-danger bg-danger py-0 my-2">Empleado</button></a>
+                            <!-- <a href="usuarios_rol?id={{B.id_usuario}}&es=EMPLE" class="p-0"><button class="btn btn-danger bg-danger py-0 my-2">Empleado</button></a> -->
                             <a href="usuarios_rol?id={{B.id_usuario}}&es=COMUN" class="p-0"><button class="btn btn-danger bg-danger py-0 my-2">Cliente</button></a>
                         </div>
                     </div>

@@ -29,3 +29,11 @@ class graficasF():
                 cursor.execute('call p_grafica_pastelEmpresas(%s)',(fecha,))
                 return cursor.fetchall()
         except Exception as ex: print(ex)
+    
+    def grafica_lineas(fecha):
+        try:
+            connection = get_connection()
+            with connection.cursor() as cursor:
+                cursor.execute('call p_grafica_lineas(%s)',(fecha,))
+                return cursor.fetchall()
+        except Exception as ex: print(ex)
