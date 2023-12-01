@@ -4,17 +4,47 @@
 <div class="fondo-img-w-auto" style="--f:url(../static/img/background.png);">
     <div class="p-4">
         <div class="row px-5 text-light">
-
-            <div class="col-md-6">
+            <div class="col-md-9">
                 {{ graph_html|safe }}
             </div>
 
-            <div class="col-md-6">
-
+            <div class="col-md-3 p-4 mt-2 bg-dark h-25">
+                <ul class="text-light list-unstyled mt-2">
+                <li>
+                    <div class="row">
+                        <div class="col md-9">Usuario</div>
+                        <div class="col md-3">N.Tratamientos</div>
+                    </div>
+                </li>
+                {% for u in usu %}
+                <li>
+                    <div class="row">
+                        <div class="col-md-9">
+                            <span><b>{{u.usu}}</b></span><br>
+                        </div>
+                        <div class="col-md-3">
+                            <span>{{u.tra}}</span>
+                        </div>
+                    </div>
+                    <hr>
+                </li>
+                {% endfor %}
+                </ul>
             </div>
 
         </div>
 
+        <br>
+        <div class="row px-5 text-light">
+            <div class="col-md-6">
+                {{ pastel_html|safe }}
+            </div>
+            <div class="col-md-6">
+                {{ lineas_hmtl|safe }}
+            </div>
+        </div>
     </div>
 </div>
+
+
 {% endblock content %}
