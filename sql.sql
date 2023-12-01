@@ -51,6 +51,105 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Volcando estructura para procedimiento idgs1004_medicard.p_grafica_lineas
+DELIMITER //
+CREATE PROCEDURE `p_grafica_lineas`(
+	IN `mes` DATE
+)
+BEGIN
+	SELECT
+		tm.nombre,
+		(
+			SELECT COUNT(*) FROM tbl_tratamientos t
+			INNER JOIN tbl_medicamentos m ON t.fk_id_medicamento = m.id_medicamento
+			WHERE m.fk_id_tipo = tm.id_tipo
+			AND
+			DATE_FORMAT(mes, '%Y-%m') >= DATE_FORMAT(t.fecha_inicio, '%Y-%m')
+			AND
+			DATE_FORMAT(mes, '%Y-%m') <= date_format(t.fecha_final, '%Y-%m')
+		) f
+	from tbl_tipos_medicina tm;
+	
+	
+	
+END//
+DELIMITER ;
+
+-- Volcando estructura para procedimiento idgs1004_medicard.p_grafica_pastelEmpresas
+DELIMITER //
+CREATE PROCEDURE `p_grafica_pastelEmpresas`(
+	IN `mes` DATE
+)
+BEGIN
+	SELECT 
+		m.fabricante,
+		(
+			SELECT
+				-- IFNULL(Group_concat(t.fecha_inicio), 0)
+			COUNT(*)
+			from tbl_tratamientos t
+			INNER JOIN tbl_medicamentos m2 ON t.fk_id_medicamento = m2.id_medicamento
+			WHERE m2.fabricante = m.fabricante
+				AND
+				DATE_FORMAT(mes, '%Y-%m') >= DATE_FORMAT(t.fecha_inicio, '%Y-%m')
+				AND
+				DATE_FORMAT(mes, '%Y-%m') <= date_format(t.fecha_final, '%Y-%m')
+		)cantidad
+	FROM tbl_medicamentos m
+	group BY m.fabricante
+	ORDER BY cantidad DESC;
+END//
+DELIMITER ;
+
+-- Volcando estructura para procedimiento idgs1004_medicard.p_grafica_top7medicinas
+DELIMITER //
+CREATE PROCEDURE `p_grafica_top7medicinas`(
+	IN `mes` DATE
+)
+BEGIN
+	SELECT 
+		CONCAT(
+			'#',m.id_medicamento,' ',
+			m.nombre
+		) nom,
+		(	SELECT COUNT(*) FROM tbl_tratamientos t
+			WHERE t.fk_id_medicamento = m.id_medicamento
+			AND
+			DATE_FORMAT(mes, '%Y-%m') >= DATE_FORMAT(t.fecha_inicio, '%Y-%m')
+			AND
+			DATE_FORMAT(mes, '%Y-%m') <= date_format(t.fecha_final, '%Y-%m')
+		)
+		cantidad		
+	FROM tbl_medicamentos m
+	ORDER BY cantidad DESC
+	LIMIT 7;
+END//
+DELIMITER ;
+
+-- Volcando estructura para procedimiento idgs1004_medicard.p_grafica_top7usuarios
+DELIMITER //
+CREATE PROCEDURE `p_grafica_top7usuarios`(
+	IN `mes` DATE
+)
+BEGIN
+	SELECT 
+		CONCAT(
+			'#',u.id_usuario,' ',u.nombre,' ',u.apellidoP
+		) nom,
+		(	SELECT COUNT(*) FROM tbl_tratamientos t
+			WHERE t.fk_id_usuario = u.id_usuario
+			AND
+			DATE_FORMAT(mes, '%Y-%m') >= DATE_FORMAT(t.fecha_inicio, '%Y-%m')
+			AND
+			DATE_FORMAT(mes, '%Y-%m') <= date_format(t.fecha_final, '%Y-%m')
+		)
+		cantidad		
+	FROM tbl_usuarios u
+	ORDER BY cantidad DESC
+	LIMIT 7;
+END//
+DELIMITER ;
+
 -- Volcando estructura para procedimiento idgs1004_medicard.p_horarios_insertAll
 DELIMITER //
 CREATE PROCEDURE `p_horarios_insertAll`(
@@ -357,7 +456,7 @@ CREATE TABLE IF NOT EXISTS `tbl_comentarios` (
   PRIMARY KEY (`id_comentario`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla idgs1004_medicard.tbl_comentarios: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla idgs1004_medicard.tbl_comentarios: ~6 rows (aproximadamente)
 INSERT INTO `tbl_comentarios` (`id_comentario`, `nombre`, `correo`, `mensaje`, `fecha`) VALUES
 	(1, 'jaun', 'jj@gmail.com', 'ts buena, curo mi refrujo', '2023-11-28'),
 	(2, 'dsadadadasd', 'dsass@gmail.com', 'dsadasdasd', '2023-11-28'),
@@ -392,26 +491,16 @@ CREATE TABLE IF NOT EXISTS `tbl_horarios` (
   PRIMARY KEY (`id_horario`),
   KEY `FK_tbl_horario_tbl_tratamientos` (`fk_id_tratamiento`),
   CONSTRAINT `FK_tbl_horario_tbl_tratamientos` FOREIGN KEY (`fk_id_tratamiento`) REFERENCES `tbl_tratamientos` (`id_tratamiento`)
-) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=132 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla idgs1004_medicard.tbl_horarios: ~5 rows (aproximadamente)
+-- Volcando datos para la tabla idgs1004_medicard.tbl_horarios: ~16 rows (aproximadamente)
 INSERT INTO `tbl_horarios` (`id_horario`, `fk_id_tratamiento`, `medicina_tomada`, `fecha`) VALUES
 	(9, 1, 0, '2023-01-01 05:00:00'),
 	(12, 2, 0, '2023-01-01 11:00:00'),
 	(13, 3, 0, '2023-01-01 14:00:00'),
 	(28, 1, 1, '2023-11-09 12:05:04'),
 	(29, 4, 0, '2023-11-09 12:37:18'),
-	(30, 4, 2, '2023-11-09 16:00:00'),
-	(31, 4, 0, '2023-01-01 05:00:00'),
-	(32, 4, 0, '2023-01-01 08:00:00'),
-	(33, 4, 0, '2023-01-01 11:00:00'),
-	(34, 4, 0, '2023-01-01 14:00:00'),
-	(35, 4, 0, '2023-01-01 17:00:00'),
-	(36, 4, 0, '2023-01-01 20:00:00'),
-	(37, 4, 0, '2023-01-01 23:00:00'),
-	(38, 4, 0, '2023-01-02 02:00:00'),
-	(39, 4, 0, '2023-01-02 05:00:00'),
-	(40, 3, 0, '2023-01-01 05:00:00');
+	(30, 4, 2, '2023-11-09 16:00:00');
 
 -- Volcando estructura para tabla idgs1004_medicard.tbl_imagenes
 CREATE TABLE IF NOT EXISTS `tbl_imagenes` (
@@ -454,8 +543,8 @@ INSERT INTO `tbl_medicamentos` (`id_medicamento`, `nombre`, `fabricante`, `canti
 	(2, 'paracetamol', 'similares', 8, 'pastillas', 'disponibles', 3),
 	(3, 'pepto bismol', 'Procter y Gamble Company', 250, 'ml', 'disponibles', 2),
 	(13, 'Pastilla dia siguiente', 'Prudence', 1, 'ml', 'disponibles', 6),
-	(17, 'producto x', 'x', 8, 'píldoras', 'Verificado', 5),
-	(18, 'f', 'f', 3, '4', 'Por Verificar', 1);
+	(17, 'producto x', 'farmacias x', 8, 'píldoras', 'Verificado', 5),
+	(18, 'f', 'fizzer', 3, '4', 'Por Verificar', 1);
 
 -- Volcando estructura para tabla idgs1004_medicard.tbl_tipos_medicina
 CREATE TABLE IF NOT EXISTS `tbl_tipos_medicina` (
@@ -465,7 +554,7 @@ CREATE TABLE IF NOT EXISTS `tbl_tipos_medicina` (
   PRIMARY KEY (`id_tipo`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla idgs1004_medicard.tbl_tipos_medicina: ~5 rows (aproximadamente)
+-- Volcando datos para la tabla idgs1004_medicard.tbl_tipos_medicina: ~0 rows (aproximadamente)
 INSERT INTO `tbl_tipos_medicina` (`id_tipo`, `nombre`, `descripcion`) VALUES
 	(1, 'sin categoria', 'no tiene categoria asignada'),
 	(2, 'antiviral', 'palos virus'),
@@ -497,7 +586,7 @@ CREATE TABLE IF NOT EXISTS `tbl_tratamientos` (
 INSERT INTO `tbl_tratamientos` (`id_tratamiento`, `fk_id_usuario`, `fk_id_medicamento`, `precio`, `dosis`, `periodo_en_horas`, `fecha_inicio`, `fecha_final`, `fk_id_grupo`) VALUES
 	(1, 4, 1, 1, 2, 4, '2023-09-13 00:00:00', '2023-11-03 00:00:00', 1),
 	(2, 4, 1, 2, 2, 2, '2023-11-03 00:00:00', '2023-11-03 00:00:00', 1),
-	(3, 4, 1, 2, 2, 2, '2023-11-07 18:37:33', '2023-11-08 18:29:10', NULL),
+	(3, 4, 18, 2, 2, 2, '2023-11-07 18:37:33', '2023-11-08 18:29:10', NULL),
 	(4, 4, 3, 2, 2, 3, '2023-11-09 12:36:22', '2023-11-09 12:36:24', 2);
 
 -- Volcando estructura para tabla idgs1004_medicard.tbl_usuarios

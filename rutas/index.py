@@ -11,6 +11,7 @@ from datetime import datetime
 from flask import Flask, render_template
 import plotly.express as px
 from plotly.offline import plot
+from plotly.utils import PlotlyJSONEncoder
 import io
 import base64
 # pip install Flask matplotlib
@@ -22,6 +23,7 @@ import base64
 import sys
 sys.path.append("..")
 from modelos.M_comentarios import tbl_comentarios
+from modelos.M_graficas import graficasF
 import validaciones
 
 ind = Blueprint('ind',__name__)
@@ -51,25 +53,19 @@ def opina_post():
         
     return redirect(url_for('ind.opina'))
     
-@ind.route("/dashboard")
-def dashboard():
+@ind.route("/dashbord")
+def dashbord():
 
-    data = {
-        'aspirina 2': 12,
-        'paracetamol': 1,
-        'pepto bismol': 12,
-        'aspirina 22': 12,
-        'paracetamol2': 11,
-        'pepto bismol2': 123
-        }
+
+    data = {'Categoría 1': 20, 'Categoría 2': 35, 'Categoría 3': 15}
 
     # Generar la gráfica de barras con Plotly
-    fig = px.bar(x=list(data.keys()), y=list(data.values()),
-        labels={'x':'Medicamentos', 'y':'N. Tratamientos'}, title='Top 7 Medicamentos')
+    fig = px.bar(x=list(data.keys()), y=list(data.values()), labels={'x':'Categorías', 'y':'Valores'}, title='Gráfica de Barras')
+
     # Guardar la gráfica en formato HTML
     graph_html = plot(fig, output_type='div')
 
-    return render_template('index/dashboard.html', graph_html=graph_html)
+    return render_template('index/dashbord.html', graph_html=graph_html)
     return render_template('index/dashbord.html')
 
 
