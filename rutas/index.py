@@ -14,6 +14,8 @@ from plotly.offline import plot
 from plotly.utils import PlotlyJSONEncoder
 import io
 import base64
+
+from modelos.M_usuarios import tbl_usuarios, usuariosF
 # pip install Flask matplotlib
 # pip install pandas
 # pip install plotly
@@ -54,8 +56,10 @@ def opina_post():
     return redirect(url_for('ind.opina'))
     
 @ind.route("/dashboard", methods=['GET','POST'])
+@login_required
 def dashbord():
-
+    usuario = current_user
+    if usuario.rol != 'ADMIN': return redirect(url_for('index'))
     fecha = str(datetime.now())[:10]
     # if method.
     if request.method == 'POST':

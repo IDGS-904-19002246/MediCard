@@ -1,5 +1,6 @@
 env/
 __pycache__/
+modelos/__init__.py
 modelos/__pycache__
 rutas/__pycache__
 

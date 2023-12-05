@@ -1,14 +1,13 @@
 {% extends "layout.html" %}
 {% from '_macros.html' import render_firld2 %}
 {% block content %}
-<div class="bg-light p-1"></div>
 <div class="p-4 pt-2 back fondo-img" style="--f:url(../static/img/background.png);">
 
     <div class="row">
         <h2 class="text-light text-center">Mi cuenta</h2>
     <!-- -------------------------------------------------------------------------------- -->
 
-        <div class="col-sm-3 p-4 mt-2 bg-danger h-25" style="border-radius: 32px 8px 32px 32px;">
+        <div class="col-sm-3 p-4 mt-2 bg-dark h-25" style="border-radius: 32px 8px 32px 32px;">
             
             <ul class="text-light list-unstyled px-4" id="datos">
                 <li><b>Nombre:</b> {{U.nombre}} {{U.apellidoP}} {{U.apellidoM}}</li>
@@ -24,21 +23,23 @@
         </div>
     <!-- -------------------------------------------------------------------------------- -->
 
-        <div class="col-sm-9 table-responsive bg-opacity" id="U" style="--co:#ffffff80;">
+        <div class="col-sm-9 table-responsive text-light fondo-trans" id="U" style="--co:#00000080;">
 
             <h4 class="text-center">Mis tratamientos</h4>
             <div style="overflow-x: hidden; height: 360px;scrollbar-width:none;">
 
                 {% for l in lista %}
-                <h6 class="fw-bold">Tratamiento con: {{ l.medicina}} </h6>
-                <h6>Iniciado el: {{ l.inicio}} </h6>
-                <h6>Finalizado el: {{ l.final}} </h6>
+                <h6 class="fw-bold">Tratamiento con: {{ l.medicina}}
+                    <button class="btn btn-outline-light py-0 float-end" onclick="$('#tratamiento_{{l.id}}').slideToggle(250);">ver horarios</button>
+                </h6>
+                <h6>Iniciado el: {{ l.inicio}}</h6>
+                <h6>Finalizado el: {{ l.final}}</h6>
 
-                    <div class="rounded bg-danger">
+                    <div class="rounded bg-azul tratamiento" id="tratamiento_{{l.id}}">
 
                         {% for h in l.horarios %}
-                        <div class="text-light ">
-                            <h6 class="d-inline-block px-4" style="width: 8%;">
+                        <div class="text-dark">
+                            <h6 class="d-inline-block px-4" style="width: 25%;">
                                 {% if h.medicina_tomada == '0' %}Pendiente {% endif %}
                                 {% if h.medicina_tomada == '1' %}Tomada a tiempo {% endif %}
                                 {% if h.medicina_tomada == '2' %}Tomada tarde {% endif %}
@@ -51,6 +52,8 @@
                         {% endfor %}
                     
                     </div>
+
+                <div class="bg-azul pt-1"></div>
                 {% endfor %}
             </div>
         </div>
@@ -120,6 +123,9 @@
 </div> -->
 <script src="../../static/form.js"></script>
 <script>
+
+    function miFuncion() {$('.tratamiento').slideToggle(250);}
+    document.addEventListener('DOMContentLoaded', miFuncion);
 
     $(document).ready(function(){
         $("#button_editar").click(function(){

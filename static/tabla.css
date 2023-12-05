@@ -53,3 +53,18 @@
     transition: 0.5s all ease;
 }
 
+.esconder2{
+    position: absolute;
+    top: 60%;
+    left: 0px;
+    padding: 8px 8px;
+    color: white;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+
+    opacity: 1;
+    width: 80%;
+    transition: 0.5s all ease;
+}

@@ -200,7 +200,10 @@ def singup():
 
 
 @usu.route('/usuarios', methods=['GET','POST'])
+@login_required
 def usuarios():
+    usuario = current_user
+    if usuario.rol != 'ADMIN': return redirect(url_for('index'))
     U = usuariosF.Select()
     ADMIN = [{'id_usuario':id, 'nombre':nom, 'correo':c,'rol':r} for id,nom,c,r in U[0]]
     EMPLE = [{'id_usuario':id, 'nombre':nom, 'correo':c,'rol':r} for id,nom,c,r in U[1]]
@@ -227,8 +230,11 @@ def medicamentos_delete():
     return redirect(url_for('med.medicamentos'))
 
 @usu.route('/usuarios_detalles', methods=['GET','POST'])
+@login_required
 def usuarios_detalles():
-    usuario = tbl_usuarios.query.get(4)
+    # usuario = tbl_usuarios.query.get(4)
+    usuario = current_user
+    
     tratamientos = usuariosF.SelectOneData(usuario.id_usuario)
 
     create_form = validaciones.usuarios(request.form)
@@ -261,4 +267,5 @@ def usuarios_detalles():
         return redirect(url_for('usu.usuarios_detalles'))   
 
 
-    return render_template("usu/usuarios_edit.html", lista = tratamientos_json, U=usuario, form = create_form)
+    return render_template("usu/usuarios_edit.html",
+        lista = tratamientos_json, U=current_user, form = create_form)

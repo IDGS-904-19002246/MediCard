@@ -7,8 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     
-    <!-- <link rel="shortcut icon" href="../static/img/logo_min.png"> -->
-
+    <link rel="shortcut icon" href="../static/img/logo_64.png">
     <link rel="stylesheet" href="../static/css/bootstrap.min.css">
     <script src="../static/js/bootstrap.bundle.min.js"></script>
     <!-- JQUERY -->
@@ -39,7 +38,7 @@
 
         <nav class="navbar navbar-expand-lg navbar-light p-0">
             <div class="navbar-brand p-0">
-                <img src="../static/img/logo_min.png" style="height: 40px;margin-left: 40px;" alt="NoLogo">
+                <img src="../static/img/logo_64.png" style="height: 40px;margin-left: 40px;" alt="NoLogo">
             </div>
             <button class="navbar-toggler" onclick="$('#navbarNav').slideToggle(250);">
                 <span class="navbar-toggler-icon"></span>
@@ -49,31 +48,16 @@
 
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item"><a class="nav-link" href="/index">Inicio</span></a></li>
+                    {% if current_user.is_authenticated %}
+                    {% if current_user.rol == 'ADMIN' %}
                     <li class="nav-item"><a class="nav-link" href="/medicamentos">Medicamentos</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="/dashboard">Dashboard</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="/usuarios">Usuarios</span></a></li>
+                    {%endif%}
+                    {%endif%}
                     <li class="nav-item"><a class="nav-link" href="/nosotros">Nosotros</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="/opina">Danos tu opinion</span></a></li>
 
-
-                    <!-- {% if current_user.is_authenticated and current_user.rol == 'admin' or current_user.rol == 'empleado' %}
-                    
-                    <li class="nav-item"><a class="nav-link text-light" onclick="$('#admin').slideToggle(250);">
-                        Administración
-                        <div class="collapse bg-light position-absolute px-4" id="admin" style="z-index: 2;">
-                            <div><a class="nav-link" href="/productos_admin">Productos</a></div>
-                            <div><a class="nav-link" href="/insumos">Ingredientes</a></div>
-                            <div><a class="nav-link" href="/cocina">Cocina</a></div>
-
-                            {%if current_user.rol == 'admin'%}
-                            
-                            <div><a class="nav-link" href="/ventas" id="ventas">Ventas</a></div>
-                            <div><a class="nav-link" href="/usuarios">Usuarios</a></div>
-                            <div><a class="nav-link" href="/proveedores">Proveedores</a></div>
-                            {%endif%}
-                        </div>
-                    </li>
-                    {% endif %} -->
                 </ul>
 
                 <ul class="navbar-nav mr-auto">
@@ -84,13 +68,14 @@
                     <li class="nav-item">
                         <a class="nav-link" href="singup">Crear Cuenta</a>
                     </li>
+                    
                     {%endif%}
                     {% if current_user.is_authenticated  %}
                     <li class="nav-item float-end">
-                        <a class="nav-link text-light" href="micuenta">Mi Cuenta</a>
+                        <a class="nav-link" href="usuarios_detalles">Mi Cuenta</a>
                     </li>
                     <li class="nav-item float-end">
-                        <a class="nav-link text-light" href="logout">Cerrar Sesión</a>
+                        <a class="nav-link" href="logout">Cerrar Sesión</a>
                     </li>
                     {%endif%}
                 </ul>
@@ -104,19 +89,43 @@
     </div>
 
     <div style="height:90%;width: 100%; background-color: black;">
-    <div class="bg-danger p-1"></div>
+    <div class="bg-azul pt-1"></div>
         {% block content %}
 
         {% endblock %}
-        <div class="bg-light pt-1"></div>
+        <div class="bg-azul pt-1"></div>
         <footer class="bg-dark p-5">
             <div class="row text-light">
+
                 <div class="col-md-2"></div>
                 <div class="col-md-4">
                     <h6>Contactanos</h6>
+                    <ul>
+                        <li>Blvd. Universidad Tecnológica #225 Col. San Carlos</li>
+                        <li>CP. 37670 León, Gto. Mex.</li>
+                        <li>Tel +52 (477) 0123 456</li>
+                    </ul>
                 </div>
                 <div class="col-md-4">
                     <h6>Redes Sociales</h6>
+                    
+                    <a href="https://www.facebook.com/">
+                        <div class="icons-redes">
+                            <i class="bi bi-facebook"></i>
+                        </div>
+                    </a>
+
+                    <a href="https://twitter.com/">
+                        <div class="icons-redes">
+                            <i class="bi bi-twitter-x"></i>
+                        </div>
+                    </a>
+
+                    <a href="https://www.instagram.com/">
+                        <div class="icons-redes">
+                            <i class="bi bi-instagram"></i>
+                        </div>
+                    </a>
                 </div>
                 <div class="col-md-2"></div>
             </div>

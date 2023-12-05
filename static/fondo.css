@@ -11,10 +11,17 @@
 .fondo-trans{
     background-color: var(--co);
 }
+.fondo-patron{
+    height: 100%;
+    width: 100%;
+    background-size: 25% 25%;
+    background-image: url(../static/img/background_400.jpg);
+    background-repeat: repeat;
+}
 
 .bg-azul{
     background-color: aqua;
 }
 .fondo-degradado{
-    background: linear-gradient(to bottom right, #ffffff,80%, #00000000);
+    background: linear-gradient(to bottom right, aqua,40%, #00000000);
 }

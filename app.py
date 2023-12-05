@@ -94,7 +94,9 @@ def index():
     return render_template('index/index.html')
 
 
-    # return render_template('index.html', current_user=current_user, )
+@app.errorhandler(404)
+def page_not_found(error):
+    return redirect(url_for('index'))
 
 
 @app.route("/nosotros", methods=['GET'])
@@ -144,7 +146,7 @@ def login2(): return google.authorize(callback=url_for('authorized', _external=T
 def logout():
     logout_user()
     session.pop('google_token', None)
-    response = make_response(redirect(url_for('app.login')))
+    response = make_response(redirect(url_for('usu.login')))
     return response
     
 
@@ -231,6 +233,5 @@ def api_tratamientos_add():
 if __name__ == '__main__':
     csrf.init_app(app)
     db.init_app(app)
-    with app.app_context():
-        db.create_all()
-    app.run(debug=True)
+    with app.app_context(): db.create_all()
+    app.run(host='0.0.0.0', port=5000,debug=True)

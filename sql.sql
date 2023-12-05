@@ -434,17 +434,13 @@ CREATE TABLE IF NOT EXISTS `tbl_comentarios` (
   `mensaje` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `fecha` date DEFAULT NULL,
   PRIMARY KEY (`id_comentario`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla idgs1004_medicard.tbl_comentarios: ~7 rows (aproximadamente)
+-- Volcando datos para la tabla idgs1004_medicard.tbl_comentarios: ~2 rows (aproximadamente)
 INSERT INTO `tbl_comentarios` (`id_comentario`, `nombre`, `correo`, `mensaje`, `fecha`) VALUES
-	(1, 'jaun', 'jj@gmail.com', 'ts buena, curo mi refrujo', '2023-11-28'),
-	(2, 'dsadadadasd', 'dsass@gmail.com', 'dsadasdasd', '2023-11-28'),
-	(3, 'dsadadadasda', 'dsass@gmail.com', 'dsadsa dsssss sssss sssssssss ssssssss ssssssssssss dsadsa dsssss sssss sssssssss ssssssss ssssssssssss', '2023-11-28'),
-	(4, 'jaun', 'jj@gmail.com', 'ts buena, curo mi refrujo', '2023-11-28'),
-	(5, 'jaun', 'jj@gmail.com', 'ts buena, curo mi refrujo', '2023-11-28'),
-	(6, 'jaun', 'jj@gmail.com', 'ts buena, curo mi refrujo', '2023-11-28'),
-	(7, 'ddsdsd', 'dsddsd@gmail.com', 'dsddsadasdasdas', '2023-11-28');
+	(1, 'juan jose Rocio Villanueva', 'RVjuan@gmail.com', 'ts buena me ayudo con mi refrujo', '2023-11-28'),
+	(2, 'Luis Lopez Loera', 'LLLuis@gmail.com', 'No sirvio el login en la movil', '2023-11-28'),
+	(8, 'juan jose 5', 'juan5@gmail.com', 'el login funciono', '2023-12-02');
 
 -- Volcando estructura para tabla idgs1004_medicard.tbl_grupos
 CREATE TABLE IF NOT EXISTS `tbl_grupos` (
@@ -500,9 +496,9 @@ CREATE TABLE IF NOT EXISTS `tbl_imagenes` (
   PRIMARY KEY (`id_imagen`),
   KEY `FK_tbl_imagenes_tbl_medicamentos` (`fk_id_medicamento`),
   CONSTRAINT `FK_tbl_imagenes_tbl_medicamentos` FOREIGN KEY (`fk_id_medicamento`) REFERENCES `tbl_medicamentos` (`id_medicamento`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla idgs1004_medicard.tbl_imagenes: ~9 rows (aproximadamente)
+-- Volcando datos para la tabla idgs1004_medicard.tbl_imagenes: ~11 rows (aproximadamente)
 INSERT INTO `tbl_imagenes` (`id_imagen`, `fk_id_medicamento`, `url`) VALUES
 	(1, 1, 'Aspirina Bayer.jpg'),
 	(22, 2, 'Paracetamol Johnson & Johnson.jpg'),
@@ -528,21 +524,21 @@ CREATE TABLE IF NOT EXISTS `tbl_medicamentos` (
   PRIMARY KEY (`id_medicamento`),
   KEY `FK_tbl_medicamentos_tbl_tipos_medicina` (`fk_id_tipo`),
   CONSTRAINT `FK_tbl_medicamentos_tbl_tipos_medicina` FOREIGN KEY (`fk_id_tipo`) REFERENCES `tbl_tipos_medicina` (`id_tipo`)
-) ENGINE=InnoDB AUTO_INCREMENT=98 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=99 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Volcando datos para la tabla idgs1004_medicard.tbl_medicamentos: ~11 rows (aproximadamente)
 INSERT INTO `tbl_medicamentos` (`id_medicamento`, `nombre`, `fabricante`, `cantidad`, `medida`, `estado`, `fk_id_tipo`) VALUES
-	(1, 'Aspirina', 'Bayer', 5, 'ml', 'disponibles', 2),
-	(2, 'Paracetamol', 'Johnson & Johnson', 8, 'pastillas', 'disponibles', 3),
-	(3, 'Ibuprofeno', 'PFizer', 250, 'ml', 'disponibles', 2),
-	(4, 'Omeprazol', 'AstraZeneca', 1, 'ml', 'disponibles', 6),
+	(1, 'Aspirina', 'Bayer', 5, 'ml', 'Por Verificar', 2),
+	(2, 'Paracetamol', 'Johnson & Johnson', 8, 'pastillas', 'Por Verificar', 3),
+	(3, 'Ibuprofeno', 'PFizer', 250, 'ml', 'Verificado', 2),
+	(4, 'Omeprazol', 'AstraZeneca', 1, 'ml', 'Verificado', 9),
 	(5, 'Amoxicilina', 'GlaxoSmithKline', 8, 'píldoras', 'Verificado', 5),
-	(6, 'Diazepam', 'Roche', 2, 'ml', 'disponibles', 1),
-	(7, 'Emergen-C', 'Pfizer', 69, 'ml', 'disponibles', 1),
-	(8, 'Píldoras Anticonceptivas', 'Yaz', 69, 'ml', 'disponibles', 1),
-	(9, 'Fluoxetina', 'Eli Lilly and Company', 69, 'ml', 'disponibles', 1),
-	(10, 'Insulina', 'Eli Lilly and Company', 69, 'ml', 'disponibles', 1),
-	(11, 'Insulina', 'Novo Nordisk', 69, 'ml', 'disponibles', 1);
+	(6, 'Diazepam', 'Roche', 2, 'ml', 'Verificado', 1),
+	(7, 'Emergen-C', 'Pfizer', 69, 'ml', 'Verificado', 1),
+	(8, 'Píldoras Anticonceptivas', 'Yaz', 69, 'ml', 'Verificado', 1),
+	(9, 'Fluoxetina', 'Eli Lilly and Company', 69, 'ml', 'Verificado', 1),
+	(10, 'Insulina', 'Eli Lilly and Company', 69, 'ml', 'Verificado', 6),
+	(11, 'Insulina', 'Novo Nordisk', 69, 'ml', 'Verificado', 1);
 
 -- Volcando estructura para tabla idgs1004_medicard.tbl_tipos_medicina
 CREATE TABLE IF NOT EXISTS `tbl_tipos_medicina` (
@@ -552,19 +548,18 @@ CREATE TABLE IF NOT EXISTS `tbl_tipos_medicina` (
   PRIMARY KEY (`id_tipo`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla idgs1004_medicard.tbl_tipos_medicina: ~9 rows (aproximadamente)
+-- Volcando datos para la tabla idgs1004_medicard.tbl_tipos_medicina: ~11 rows (aproximadamente)
 INSERT INTO `tbl_tipos_medicina` (`id_tipo`, `nombre`, `descripcion`) VALUES
 	(1, 'sin categoria', 'no tiene categoria asignada'),
-	(2, 'Antiinflamatorio', 'palos virus'),
-	(3, 'Analgésico', 'palas bcterias'),
-	(5, 'Antibiótico', 'pal acido'),
-	(6, 'Sedante', 'no globo no fiesta'),
-	(7, 'Antihistamínico ', 'ds'),
-	(8, 'Antidepresivo ', 'ds'),
-	(9, 'Antiácido', 'antiácido'),
-	(10, 'Anticonceptivo ', 'ds'),
-	(11, 'Vitamina ', 'ds'),
-	(12, 'Anticonceptivo', 'fd');
+	(2, 'Antiinflamatorio', 'ayuda con golpes e inflamacion'),
+	(3, 'Analgésico', 'ayuda con la gripe'),
+	(5, 'Antibiótico', 'ayuda con los virus'),
+	(6, 'Sedante', 'ayuda a dormir y nitigar el dolor'),
+	(7, 'Antihistamínico ', 'ayuda con problemas histamina'),
+	(8, 'Antidepresivo ', 'ayuda contra la tristeza'),
+	(9, 'Antiácido', 'para reflujo y gastritis'),
+	(11, 'Vitamina ', 'para la desnitricion'),
+	(12, 'Anticonceptivo', 'para no concebir');
 
 -- Volcando estructura para tabla idgs1004_medicard.tbl_tratamientos
 CREATE TABLE IF NOT EXISTS `tbl_tratamientos` (
@@ -607,10 +602,10 @@ CREATE TABLE IF NOT EXISTS `tbl_usuarios` (
 
 -- Volcando datos para la tabla idgs1004_medicard.tbl_usuarios: ~4 rows (aproximadamente)
 INSERT INTO `tbl_usuarios` (`id_usuario`, `nombre`, `apellidoP`, `apellidoM`, `correo`, `contrasena`, `rol`) VALUES
-	(4, 'juan jose', 'martinez', 'lopez', 'juan@gmail.com', 'sha256$J3TegcnZXhKZIPGq$af0f03d2cecf815aa684b043fba7996ec239907182040e9d95410492a409660f', 'COMUN'),
-	(20, 'juan jose de jesus', 'estrada', 'gasca', 'juan2@gmail.com', 'sha256$IKJnWYMH7lPIjku9$6be2958e49f4f1d8e709ff79d5b8b539943570c3be0a82bec1784d03ce8d9165', 'ADMIN'),
-	(21, 'juan', 'martinez', 'lopez', 'juan3@gmail.com', 'sha256$gZGEe0xnQx0Y59BD$cbe490bc5d55f69606ec17e49aeb8423c8551e87ffec66fcdc70235510b3ed9f', 'ADMIN'),
-	(22, 'juan jr', 'lopez', 'martinez', 'juanjr@gmail.com', 'sha256$Ei8lU0rGxv6lxaWn$ddc3e5510955d54ec53fb3ff23a3463074efd9729fedb48a96a7b6682065f720', 'COMUN');
+	(4, 'juan jose2', 'martinez', 'lopez', 'juan@gmail.com', 'sha256$J3TegcnZXhKZIPGq$af0f03d2cecf815aa684b043fba7996ec239907182040e9d95410492a409660f', 'COMUN'),
+	(20, 'juan jose de jesus', 'estrada', 'gasca', 'juan2@gmail.com', 'sha256$J3TegcnZXhKZIPGq$af0f03d2cecf815aa684b043fba7996ec239907182040e9d95410492a409660f', 'COMUN'),
+	(21, 'juan', 'martinez', 'lopez', 'juan3@gmail.com', 'sha256$J3TegcnZXhKZIPGq$af0f03d2cecf815aa684b043fba7996ec239907182040e9d95410492a409660f', 'ADMIN'),
+	(22, 'juan jr', 'lopez', 'martinez', 'juanjr@gmail.com', 'sha256$J3TegcnZXhKZIPGq$af0f03d2cecf815aa684b043fba7996ec239907182040e9d95410492a409660f', 'COMUN');
 
 -- Volcando estructura para procedimiento idgs1004_medicard.usuariosInsert
 DELIMITER //

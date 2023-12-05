@@ -67,6 +67,12 @@
 
                     <h4 class="rounded-bottom bg-light text-dark">{{m.nombre}}</h4>
 
+                    {%if m.estado == 'Por Verificar' %}
+                    <div class="rounded-end esconder2 text-light bg-danger">
+                        Por Verificar
+                    </div>
+                    {%endif%}
+
                     <div class="rounded-end esconder text-light bg-dark">
                         <h6>Administración</h6>
                         <a href="medicamentos_edit?id={{m.id_medicamento}}" ><button class="btn btn-outline-light p-1" onclick='form_tipo("{{ l }}")'><i class="bi bi-pen"></i></button></a>
@@ -166,24 +172,24 @@
             $('.'+tipo).removeClass('d-none');
         }
         // ------------------------------------------
-        // if (nombre != '' && tipo == 'sin categoria') {
-        //     var medicinas = $('.tarjeta');
-        //     $('.tarjeta').addClass('d-none');
-        //     medicinas.each(function () {
-        //         if ($(this).attr('title').includes(nombre)) {
-        //             $(this).removeClass('d-none');
-        //         }
-        //     });
-        // }
-        // if (nombre != '' && tipo != 'sin categoria') {
-        //     $('.tarjeta').addClass('d-none');
-        //     var medicinas = $('.tarjeta');
-        //     medicinas.each(function () {
-        //         if ($(this).attr('title').includes(nombre) && $(this).attr('class').includes(tipo)) {
-        //             $(this).removeClass('d-none');
-        //         }
-        //     });
-        // }
+        if (nombre != '' && tipo == 'sin categoria') {
+            var medicinas = $('.tarjeta');
+            $('.tarjeta').addClass('d-none');
+            medicinas.each(function () {
+                if ($(this).attr('title').includes(nombre)) {
+                    $(this).removeClass('d-none');
+                }
+            });
+        }
+        if (nombre != '' && tipo != 'sin categoria') {
+            $('.tarjeta').addClass('d-none');
+            var medicinas = $('.tarjeta');
+            medicinas.each(function () {
+                if ($(this).attr('title').includes(nombre) && $(this).attr('class').includes(tipo)) {
+                    $(this).removeClass('d-none');
+                }
+            });
+        }
     }
 
 

@@ -22,7 +22,10 @@ from modelos.M_tipo import tbl_tipos_medicina
 med = Blueprint('med',__name__)
 
 @med.route("/medicamentos", methods=['GET','POST'])
+@login_required
 def medicamentos():
+    usuario = current_user
+    if usuario.rol != 'ADMIN': return redirect(url_for('index'))
     m = medicamentosF.Select()
     tipos = tbl_tipos_medicina.query.all()
     tipos_json = [{'id_tipo': t.id_tipo, 'nombre': t.nombre, 'descripcion': t.descripcion} for t in tipos] 
